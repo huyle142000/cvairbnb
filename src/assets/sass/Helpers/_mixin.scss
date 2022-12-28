@@ -1,0 +1,50 @@
+@mixin styleText($color, $fs, $fw, $lh) {
+    color: $color;
+    font-size: $fs;
+    font-weight: $fw;
+    line-height: $lh;
+}
+
+@mixin styleTextPd($bg-color, $pd) {
+    background-color: $bg-color;
+    padding: $pd;
+}
+
+@mixin displayFlex($jc, $at) {
+    display: flex;
+    justify-content: $jc;
+    align-items: $at;
+}
+
+@mixin styleButtonDefault($pd, $bg-color) {
+    padding: $pd;
+    background-color: $bg-color;
+    border: transparent;
+}
+
+@mixin buttonForm($pd, $fs) {
+    color: $color-white;
+    background-color: $bg-btn-primary;
+    padding: $pd;
+    font-size: $fs;
+}
+
+$breakpoints: (
+    "extra-large": 1200px,
+    "large": 992px,
+    "medium": 768px,
+    "small": 576px,
+);
+//$screen:tên màn hình muốn lấy kích thước
+@mixin responsive($screen) {
+    @if (map-has-key($map: $breakpoints, $key: $screen)) {
+        //tìm thấy tên màn hình trong danh sách breakpoints
+        $value: map-get(
+            $map: $breakpoints,
+            $key: $screen,
+        );
+        @media screen and (max-width: $value) {
+            @content;
+        }
+    }
+}

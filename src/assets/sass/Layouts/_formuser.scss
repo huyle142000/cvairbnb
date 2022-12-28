@@ -1,0 +1,92 @@
+.header__right {
+    position: relative;
+    .header__border {
+        padding: 5px 12px;
+        padding-right: 8px;
+        border: 1px solid transparent;
+    }
+    @include displayFlex(flex-start, center);
+    .avatar {
+        margin-left: 5px;
+    }
+    .btn--header {
+        @include styleButtonDefault(12px, transparent);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        border-radius: 40px;
+        &:hover {
+            background-color: $color-white-3;
+        }
+    }
+    .pd__icon {
+        padding-left: 12px;
+    }
+    .avatar__icon {
+        background-color: $color-gray-1;
+        color: $color-white;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 50%;
+
+        display: inline-block;
+        width: 30px;
+    }
+}
+.form_user {
+    .form_user-popup {
+        box-shadow: 0px 0px 2px #ababab;
+        border-radius: 20px;
+        padding: 10px 0;
+        position: absolute;
+        right: 0;
+        width: 100%;
+        margin-top: 10px;
+        background-color: #fff;
+        z-index: 123123;
+        h6 {
+            padding: 10px 20px;
+            cursor: pointer;
+            &:hover {
+                background-color: #ababab1d;
+            }
+            &:first-child {
+                font-weight: 600;
+                font-size: 13px;
+            }
+            font-size: 13px;
+            font-weight: 400;
+
+        }
+        .form_user-popup-child {
+            h6 {
+                font-weight: 400;
+            }
+        }
+    }
+    .form_user-icon {
+        box-shadow: 0px 0px 2px #ababab;
+        padding: 10px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-radius: 20px;
+
+        i:first-child {
+            margin-right: 10px;
+        }
+        i {
+            font-size: 18px;
+        }
+        &:hover {
+            box-shadow: 0px 0px 10px #ababab;
+        }
+        img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+.map__container {
+    width: 100%;
+    height: 100vh;
+}
+
+.marker__price {
+    z-index: 1;
+    padding: 2px 8px;
+    background-color: $color-white;
+    box-shadow: rgba(255, 255, 255, 0.18) 0px 0px 0px 1px inset,
+        rgba(0, 0, 0, 0.18) 0px 2px 4px;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    border-radius: 28px;
+    transition: all 0.25s ease;
+    span {
+        @include styleText($color-black-2, $fs-1, 600, inherit);
+    }
+    &:hover {
+        z-index: 999;
+        transform: scale(1.077);
+    }
+}

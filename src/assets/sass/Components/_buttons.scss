@@ -1,0 +1,23 @@
+.btn--def {
+    @include styleButtonDefault($pd-btn-default, $color-white);
+}
+
+.btn_primary {
+    color: $color-white;
+    background-image: $bg-btn-primary;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    font-weight: 600;
+    border: none;
+}
+.btn_second {
+    color: $color-white;
+    background-color: $color-black-1;
+    &:hover {
+        color: $color-white;
+        opacity: 0.8;
+    }
+}

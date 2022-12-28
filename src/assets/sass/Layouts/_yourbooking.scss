@@ -1,0 +1,131 @@
+.your_booking {
+    padding-top: 100px;
+    padding-left: 60px;
+    padding-right: 60px;
+
+    h2 {
+        padding: 20px 0;
+        span {
+            i {
+                font-size: 20px;
+                cursor: pointer;
+                margin-right: 8px;
+            }
+        }
+    }
+    .title-trip {
+        padding: 30px 0;
+        h4 {
+            font-weight: 500;
+        }
+        p {
+            color: $color-black-1;
+            margin: 20px 0;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+    }
+    .trips_table {
+        button {
+            font-size: 18px;
+            padding: 10px;
+        }
+    }
+}
+.trips {
+    .trips-title {
+        th {
+            width: 30px;
+        }
+    }
+}
+
+
+@include responsive("large") {
+    .your_booking{
+        h2{
+            font-size: 24px;
+            span {
+                i {
+                    font-size: 14px;
+                }
+            }
+        }
+
+    }
+    .trips-title {
+        th {
+            width: 30px;
+        }
+    }
+    .trips_content-list{
+        td{
+            font-size: 13px;
+        }
+    }
+}
+
+@include responsive("medium") {
+    .header {
+        padding: 10px 0;
+    }
+    .your_booking {
+        padding-top: 180px;
+        padding-left: 10px;
+        padding-right: 10px;
+        h2 {
+            font-size: 18px;
+            span {
+                i {
+                    padding-left: 10px;
+                    font-size: 14px;
+                    margin-right: 4px;
+                }
+            }
+        }
+    }
+    .trips-title {
+        th {
+            font-size: 16px;
+        }
+        td {
+            font-size: 12px;
+        }
+    }
+    .trips_table {
+        button {
+            font-size: 16px;
+            padding: 7.5px;
+        }
+    }
+}
+@include responsive("small") {
+    .your_booking {
+        padding-left: 0px;
+        padding-right: 0px;
+        h2 {
+            font-size: 13px;
+            span {
+                i {
+                    padding-left: 10px;
+                    font-size: 10px;
+                    margin-right: 4px;
+                }
+            }
+        }
+        .trips_table {
+            button {
+                font-size: 13px;
+                padding: 5px;
+            }
+        }
+        .trips-title {
+            th {
+                font-size: 12px;
+            }
+            td {
+                font-size: 6px;
+            }
+        }
+    }
+}

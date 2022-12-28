@@ -1,0 +1,23 @@
+export const roomAddress = [
+    { id: 1, address: "Bùi Viện, Pham Ngu Lao, District 1, Ho Chi Minh City" },
+    { id: 2, address: "Tòa nhà Ree Tower, Bùi Viện" },
+    {
+        id: 3,
+        address: "Hải Triều, Bến Nghé, District 1, Ho Chi Minh City",
+    },
+    { id: 4, address: "505/14 Ben Binh Dong Street, District 8" },
+    { id: 5, address: "Nhà Nghỉ Xuân Lan Cần Thơ" },
+    { id: 6, address: "Khu dân cư Tân Phú" },
+    { id: 7, address: "Hòn Chồng" },
+    { id: 8, address: "Duc Tai Townlet, Duc Linh District" },
+    { id: 9, address: "Hanoi Old Quarter Homestay" },
+    { id: 10, address: "Hoàn Kiếm, Việt Nam" },
+    { id: 11, address: "132/31 Hoang Hoa Tham, Tan Binh Dist" },
+    { id: 12, address: "Nhà Nghỉ Quốc Hải" },
+    { id: 13, address: "Fisherman homestay, Việt Nam" },
+    { id: 14, address: "225 Hoang Van Thai, District Thanh Xuan" },
+    { id: 15, address: "100/10 Tran Hung Dao, Tan Son Nhi" },
+    { id: 16, address: "25/3 Block 4, Street 20, Hiep Binh Chanh" },
+    { id: 17, address: "354 Hung Vuong, Ward Vinh Trung, District Thanh Khe" },
+    { id: 18, address: "Ha Huy Tap, Ha TInh" },
+];

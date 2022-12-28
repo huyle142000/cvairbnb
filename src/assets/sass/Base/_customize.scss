@@ -1,0 +1,47 @@
+.border_bottom {
+    border-bottom: 1px solid #ababab5e;
+}
+.boxshadow {
+    box-shadow: 0px 0px 8px #aba9a995;
+}
+.border_around {
+    border: 2px solid black;
+    border-radius: 6px;
+}
+.border_around-thin {
+    border: 1px solid #aba9a995;
+    border-radius: 6px;
+}
+.border_around-medium {
+    border: 1px solid #aba9a9e2;
+    border-radius: 6px;
+}
+
+.mapboxgl-popup-content {
+    background-color: transparent;
+}
+
+.mapboxgl-popup-tip {
+    opacity: 0;
+}
+.spinner_load {
+    position: fixed;
+    width: 100%;
+    background: #fff;
+    opacity: 0.75;
+    height: 100%;
+    z-index: 123123123123;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    .wrap_spinner{
+        width: 100%;
+    }
+    .img_spinner {
+        background-image: url("../../../components/SpinnerLoading/airbnbloading.gif");
+        background-size: 10%;
+        height: 50px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}

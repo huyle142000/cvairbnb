@@ -1,0 +1,394 @@
+.header {
+    padding: 0 60px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: $color-white;
+    @include styleText($color-black-2, $fs-1, inherit, inherit);
+
+    .logo {
+        display: inline-block;
+        width: 250px;
+        cursor: pointer;
+    }
+    .header__border {
+        border: 1px solid $color-white-1;
+        border-radius: 40px;
+        box-shadow: $bs-header-search;
+        transition: box-shadow 0.2s ease;
+        cursor: pointer;
+        &:hover {
+            box-shadow: $bs-hover-header;
+        }
+    }
+    .header__top {
+        @include displayFlex(space-between, center);
+        padding: 12px 0;
+        flex-flow: row wrap;
+        z-index: 3;
+        .logo svg {
+            display: block;
+            width: 102px;
+            height: 32px;
+            color: $color-red-1;
+        }
+        &::after {
+            content: "";
+            z-index: 2;
+            transition: all 0.4s;
+            color: $color-white;
+            position: absolute;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: $color-white;
+        }
+    }
+    .header__search {
+        position: relative;
+        .btn--left {
+            padding-left: 24px;
+            border-top-left-radius: inherit;
+            border-bottom-left-radius: inherit;
+        }
+        .btn--right {
+            border-top-right-radius: inherit;
+            border-bottom-right-radius: inherit;
+        }
+        .btn--left,
+        .btn--middle {
+            font-weight: 500;
+            color: $color-black-2;
+        }
+        .btn--right {
+            font-weight: 400;
+            color: $color-gray-1;
+        }
+        span.dot {
+            position: absolute;
+            display: inline-block;
+            width: 1px;
+            height: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: $color-white-1;
+            color: $color-white-1;
+        }
+        .search__icon {
+            display: inline-block;
+            color: $color-white;
+            font-size: 12px;
+            width: 32px;
+            line-height: 34px;
+            text-align: center;
+            background-color: $color-red-1;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+    }
+
+    .header__exp {
+        @include displayFlex(center, center);
+        transform: scaleY(0);
+        transition: all 0.25s ease;
+        span {
+            margin: $mg-header-exp;
+            display: inline-block;
+            @include styleText($color-black-2, $fs-2, 400, $lh-1);
+            position: relative;
+            cursor: pointer;
+            &:hover {
+                opacity: 0.65;
+            }
+            &:hover::after {
+                transform: scaleX(1);
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                left: 0;
+                height: 2px;
+                top: calc(100% + 8px);
+                background-color: $color-black-2;
+                transform: scaleX(0);
+                transition: all 0.25s ease;
+            }
+            &.active {
+                opacity: 0.65;
+                &::after {
+                    width: 100%;
+                    transform: scaleX(1);
+                }
+            }
+        }
+    }
+    &.active__search {
+        &::after {
+            content: "";
+            transform: scaleY(2);
+            transition: all 0.25s ease;
+        }
+        .header__exp {
+            transform: scaleY(1);
+        }
+        .form__search {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .header__top::after {
+            height: 80px;
+        }
+    }
+    .form__search {
+        position: absolute;
+        z-index: 3;
+        top: 80%;
+        left: 0;
+        right: 0;
+        transition: all 0.3s ease;
+        transform: scale(0);
+        opacity: 0;
+        max-width: 850px;
+        margin: 0 auto;
+        width: 100%;
+        border: 1px solid $color-white-1;
+        border-radius: 32px;
+        background-color: $color-gray-3;
+        margin-top: 1rem;
+        cursor: pointer;
+        .header_span {
+            @include styleText($color-gray-1, $fs-1, 400, inherit);
+        }
+    }
+    .form__flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .header-popupCalendar {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            transform: translateY(10px);
+        }
+    }
+    .ip__where {
+        padding: 0px 26px;
+        padding-top: 32px;
+        padding-bottom: 10px;
+
+        border-radius: 32px;
+        min-width: 328px;
+        span {
+            position: absolute;
+            top: -50%;
+            transform: translateY(-50%);
+        }
+        input {
+            border: none;
+            width: 100%;
+            background-color: inherit;
+            &:focus {
+                outline: 0;
+            }
+        }
+        &.active {
+            box-shadow: $bs-header-form-active;
+            background-color: $color-white;
+        }
+    }
+    .form__label {
+        @include styleText($color-black-2, $fs-0, 600, inherit);
+    }
+    .form__label-where {
+        @include styleText($color-black-2, $fs-0, 600, inherit);
+        width: 100%;
+        position: relative;
+        top: 50%;
+        transform: translateY(25%);
+    }
+    .checkin,
+    .checkout,
+    .ip__who {
+        border-radius: 32px;
+        &.active {
+            box-shadow: $bs-header-form-active;
+            background-color: $color-white;
+        }
+        &:not(.active) {
+            &:hover {
+                background-color: $color-white-1;
+            }
+        }
+    }
+
+    .checkin,
+    .checkout,
+    .search__content {
+        padding: $pd-header-search;
+        .active__guest {
+            @include styleText($color-black-2, $fs-1, 500, inherit);
+        }
+    }
+    .checkin,
+    .checkout {
+        min-width: 130px;
+    }
+
+    .ip__who {
+        min-width: 260px;
+    }
+
+    .search--flex {
+        @include displayFlex(space-between, center);
+    }
+
+    .btn--search {
+        border: 1px solid transparent;
+        border-radius: 24px;
+        background-image: $bg-btn-primary;
+        padding: 16px;
+        margin-right: 8px;
+        @include styleText($color-white, $fs-2, 600, $lh-2);
+        span {
+            padding-left: 8px;
+            padding-right: 4px;
+            @include styleText($color-white, $fs-2, 600, $lh-2);
+        }
+    }
+
+    .search--extend {
+        z-index: 3;
+        position: absolute;
+        cursor: auto;
+        margin-top: 12px;
+        &.right {
+            right: 0;
+        }
+    }
+
+    .region__container {
+        max-width: 350px;
+        box-shadow: $bs-extend-map;
+        padding: $pd-extend-search;
+        background-color: $color-white;
+        border-radius: 32px;
+        .region__content {
+            padding: 16px 8px 24px;
+        }
+        h3 {
+            @include styleText($color-black-2, $fs-1, 700, inherit);
+            margin-bottom: 28px;
+            margin-left: 5px;
+        }
+        img {
+            border: 1px solid rgb(221, 221, 221);
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            &:hover {
+                border-color: $color-black-1;
+            }
+        }
+        .area {
+            margin: 8px 2px 0 2px;
+        }
+        .region__row {
+            cursor: pointer;
+            padding: 8px 32px 8px 24px;
+            @include displayFlex(flex-start, center);
+            .location__icon {
+                min-width: 48px;
+                border-radius: 12px;
+                height: 48px;
+                line-height: 48px;
+                text-align: center;
+                background-color: rgb(235, 235, 235);
+                margin-right: 16px;
+                i {
+                    font-size: 18px;
+                }
+            }
+            .region__name {
+                @include styleText($color-black-2, $fs-1, 300, $lh-1);
+            }
+            &:hover {
+                background-color: rgb(247, 247, 247);
+                border-color: rgb(247, 247, 247);
+            }
+        }
+        &.region__search {
+            padding: 32px 16px;
+        }
+    }
+
+    .guest__container {
+        max-width: 425px;
+        box-shadow: $bs-extend-map;
+        padding: $pd-extend-search;
+        background-color: $color-white;
+        border-radius: 32px;
+        letter-spacing: 0.2px;
+        .guest__content {
+            padding: 0 6px;
+            width: 350px;
+        }
+        .guest__card,
+        .card--right {
+            @include displayFlex(space-between, center);
+        }
+        .guest__card {
+            border-bottom: 1px solid rgb(235, 235, 235);
+            padding: 24px 0;
+            .card__title {
+                @include styleText($color-black-2, $fs-2, 500, $lh-1);
+                padding-bottom: 6px;
+            }
+            .card__subtitle {
+                @include styleText(rgb(113, 113, 113), $fs-1, 400, inherit);
+            }
+            .number {
+                padding: 0 12px;
+            }
+            .amount--change {
+                width: 32px;
+                height: 32px;
+                line-height: 30px;
+                font-size: 18px;
+                font-weight: 600;
+                text-align: center;
+                border: 1px solid rgb(176, 176, 176);
+                border-radius: 50%;
+                cursor: pointer;
+                &.sub {
+                    line-height: 16px;
+                }
+                &:not(.disabled):hover {
+                    border-color: $color-black-1;
+                }
+                &.disabled {
+                    color: rgb(235, 235, 235);
+                    border-color: rgb(235, 235, 235);
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+    .header__bottom {
+        position: absolute;
+    }
+}
+
+.bg__overlay {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.25);
+    height: 100%;
+}
