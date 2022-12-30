@@ -23,8 +23,6 @@
     height: 100%;
 
     .card_content {
-        display: flex;
-        flex-direction: column;
         font-size: 15px;
         line-height: 19px;
         padding: 10px 0;
@@ -34,10 +32,11 @@
     .card_name {
         display: flex;
         justify-content: space-between;
-
+        margin-bottom: 20px;
         .card_name_text {
             font-weight: 700;
             height: 40px;
+            font-size: 14px;
             width: 80%;
             color: #222222;
         }
@@ -53,25 +52,25 @@
         position: relative;
         height: 300px;
 
-        &:hover{
-            .content{
+        &:hover {
+            .content {
                 .left_arrow,
-                .right_arrow{
+                .right_arrow {
                     display: flex;
                 }
             }
         }
-        
+
         .wrapper,
         .content,
-        .img_box{
-            height: 100%; 
+        .img_box {
+            height: 100%;
             cursor: pointer;
         }
-        .content{
+        .content {
             position: relative;
 
-            .left_arrow{
+            .left_arrow {
                 width: 30px;
                 height: 30px;
                 position: absolute;
@@ -86,7 +85,7 @@
                 border-radius: 50%;
                 display: none;
             }
-            .right_arrow{
+            .right_arrow {
                 z-index: 2123123123;
                 width: 30px;
                 height: 30px;
@@ -100,10 +99,9 @@
                 border-radius: 50%;
                 display: none;
             }
-
         }
 
-        .indicators_box{
+        .indicators_box {
             position: absolute;
             width: 100%;
             display: flex;
@@ -111,26 +109,25 @@
             align-items: center;
             bottom: 7px;
 
-            i{
+            i {
                 padding: 0 10px;
                 color: lightgray;
                 font-size: 8px;
             }
         }
 
-        .indicator.active{
-            i{
+        .indicator.active {
+            i {
                 color: #fff;
             }
         }
-          
 
         img {
             height: 100%;
             width: 100%;
             border-radius: 10px;
-        }    
-        .svg_heart{
+        }
+        .svg_heart {
             position: absolute;
             top: 14px;
             right: 20px;
@@ -194,8 +191,7 @@
         cursor: pointer;
         &:hover {
             transform: scale(1.04);
-            box-shadow: 0 0 0 1px transparent, 0 0 0 4px transparent,
-                0 6px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 0 0 1px transparent, 0 0 0 4px transparent, 0 6px 16px rgba(0, 0, 0, 0.12);
         }
         i {
             margin-left: 8px;

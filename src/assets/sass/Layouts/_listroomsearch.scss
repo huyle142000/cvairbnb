@@ -1,0 +1,33 @@
+.list_room-filter {
+    .body_grid {
+        padding-top: 100px;
+    }
+    .body_grid_template2 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .map_filter {
+        padding-top: 80px;
+        position: sticky;
+        top: 0;
+    }
+    .row {
+        width: 100%;
+    }
+    .show__map {
+        display: none;
+    }
+    .card-name {
+        .card_name_text {
+            font-size: 15px;
+        }
+    }
+    .card_des,
+    .card_time {
+       font-size: 13px;
+    }
+    .card_item {
+        .card_img{
+            height: 230px;
+        }
+    }
+}

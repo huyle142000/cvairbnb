@@ -24,6 +24,7 @@ import YourBooking from "./components/FormUser/FormUserDetail/YourBooking";
 import HomeTemplate from "./templates/HomeTemplate/HomeTemplate";
 import SpinnerLoading from "./components/SpinnerLoading/SpinnerLoading";
 import { useSelector } from "react-redux";
+import ListRoomSearch from "./components/ListRoomSearch/ListRoomSearch";
 function App() {
   const { show } = useSelector((state) => state.LoadingSpinner);
   return (
@@ -39,8 +40,6 @@ function App() {
         <Route path="home" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        {/*************** BookingRoom *****************/}
-        <Route path="bookingtravel/" element={<BookingTravel />} />
 
         {/* *************  Admin  ************ */}
         <Route element={<AdminTemplate />}>
@@ -65,9 +64,10 @@ function App() {
           <Route path="yourbooking" element={<YourBooking />} />
         </Route>
 
-        {/*Booking  */}
+        {/*************** HomeTemplate *****************/}
         <Route element={<HomeTemplate />}>
           <Route path="bookingtravel/:id" element={<BookingTravel />} />
+          <Route path="roomsearch/:id" element={<ListRoomSearch />} />
         </Route>
         <Route path="confirmpay" element={<ConfirmPay />} />
       </Routes>

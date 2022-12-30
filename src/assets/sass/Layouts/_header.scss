@@ -1,12 +1,11 @@
 .header {
-    padding: 0 60px;
+    padding: 0 40px;
     position: fixed;
     left: 0;
     right: 0;
     z-index: 999;
     background-color: $color-white;
     @include styleText($color-black-2, $fs-1, inherit, inherit);
-
     .logo {
         display: inline-block;
         width: 250px;
@@ -201,6 +200,18 @@
     }
     .form__label {
         @include styleText($color-black-2, $fs-0, 600, inherit);
+        cursor: pointer;
+
+        label {
+            margin: 0;
+            cursor: pointer;
+        }
+        input {
+            border: none;
+            width: 100%;
+            background-color: transparent;
+            pointer-events: none;
+        }
     }
     .form__label-where {
         @include styleText($color-black-2, $fs-0, 600, inherit);
@@ -208,6 +219,7 @@
         position: relative;
         top: 50%;
         transform: translateY(25%);
+        pointer-events: none;
     }
     .checkin,
     .checkout,
@@ -264,6 +276,7 @@
         position: absolute;
         cursor: auto;
         margin-top: 12px;
+        top: 100%;
         &.right {
             right: 0;
         }
@@ -380,6 +393,9 @@
     .header__bottom {
         position: absolute;
     }
+}
+#where {
+    pointer-events: none;
 }
 
 .bg__overlay {

@@ -9,15 +9,56 @@ import {
   getListLocationAPI,
   getSuggestionLocation,
 } from "../../redux/actions/LocationRoomAction";
-import useSelection from "antd/lib/table/hooks/useSelection";
-import context from "react-bootstrap/esm/AccordionContext";
-import MapContainer from "../MapConponent/MapContainer";
 import CalendarBook from "../../pages/BookingTravel/CalendarBook/CalendarBook";
-import { openModal } from "../../redux/reducer/ModalReducer";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { getRequestListTrips } from "../../redux/reducer/BookTravel";
 
 export default function Header() {
   const navigate = useNavigate();
+  // reducer
+  const { checkDateIn, checkDateOut } = useSelector(
+    (state) => state.CalendarReducer
+  );
+  // ref
+  const formFlex = useRef();
+  const headerWrap = useRef();
+
+  let arrCheckEleHeaderNav = ["span_popup-location", "btn--def"];
+  useEffect(() => {
+    const handleClickFormSearch = (e) => {
+      if (formFlex) {
+        if (!formFlex?.current?.contains(e.target)) {
+          if (arrCheckEleHeaderNav.includes(e.target.classList[0])) {
+            setActiveForm(0);
+          } else {
+            setActiveForm("");
+          }
+          setShowCalendar1(false);
+          setShowCalendar2(false);
+        }
+      } else {
+        setActiveForm(0);
+      }
+    };
+
+    document.addEventListener("click", handleClickFormSearch);
+
+    const handleClickHeaderNav = (e) => {
+      if (headerWrap) {
+        if (!headerWrap.current.contains(e.target)) {
+          setActvieSearch(false);
+        }
+      }
+    };
+
+    document.addEventListener("scroll", handleClickHeaderNav);
+    return () => {
+      document.removeEventListener("mousedown", handleClickFormSearch);
+      document.removeEventListener("scroll", handleClickHeaderNav);
+    };
+  });
+  //
   const ADULT_TYPE = 0;
   const CHILD_TYPE = 1;
   const INFANTS_TYPE = 2;
@@ -30,18 +71,17 @@ export default function Header() {
   const [infantsNum, setInfantsNum] = useState(0);
   const [petNum, setPetNum] = useState(0);
   const dispatch = useDispatch();
+
   useEffect(() => {
     setTotalGuest(adultsNum + chidNum + infantsNum + petNum);
   }, [adultsNum, chidNum, infantsNum, petNum]);
 
   const { arrSuggest } = useSelector((state) => state.LocationRoomReducer);
   const [totalGuest, setTotalGuest] = useState(0);
-  const [keyword, setKeyword] = useState("");
   const [arrSuggestRegion, setArrSuggestRegion] = useState([]);
   // Calendar
   const [isShowCalendar1, setShowCalendar1] = useState(false);
   const [isShowCalendar2, setShowCalendar2] = useState(false);
-
   //Region search state
   const [region, setRegion] = useState("");
 
@@ -62,21 +102,30 @@ export default function Header() {
     setArrSuggestRegion(arrSuggestTemp);
   }, [arrSuggest]);
   // Location List
-  const { locationList } = useSelector((state) => state.LocationRoomReducer);
-  // console.log(locationList)
   const [locationSearch, setLocationSearch] = useState("");
   // Handle location
   const [value, setValueInput] = useState("");
   const [locationFirstFind, setLocationFirstFind] = useState("");
   // Check location when click map header
 
-  const handleCheckLocation = () => {};
   const handleSearch = () => {
     let locationValue = "";
     if (locationSearch) {
       locationValue = locationSearch;
     } else {
       locationValue = locationFirstFind;
+    }
+    let request = {
+      location: locationValue,
+      checkInRequest: checkDateIn,
+      checkOutRequest: checkDateOut,
+      guestRequest: totalGuest,
+    };
+    if (locationValue) {
+      dispatch(getRequestListTrips(request));
+      navigate(`roomsearch/${locationValue}`);
+    } else {
+      setActvieSearch(false);
     }
   };
 
@@ -156,9 +205,21 @@ export default function Header() {
       );
     } else {
       return (
-        <div className="header__exp">
+        <div
+          className="header__exp"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <div className="exp__flex">
-            <span className="active">Stays</span>
+            <span
+              className="span_popup-location active "
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              Stays
+            </span>
             <span>Experiences</span>
           </div>
           <span>Online Experiences</span>
@@ -176,6 +237,7 @@ export default function Header() {
           <img
             onClick={() => {
               setRegion(content);
+              setLocationSearch(content);
             }}
             className="img-fluid"
             src={src}
@@ -205,7 +267,6 @@ export default function Header() {
       );
     }
   };
-  // console.log(locationSearch);
 
   const renderSuggestRegion = () => {
     //place/region, country, locality,
@@ -241,7 +302,6 @@ export default function Header() {
   const getRegionName = (context) => {
     let regionName = "";
     context?.map((ct, index) => {
-      // console.log(ct);
       const { id, text } = ct;
       if (!id?.includes("postcode")) {
         regionName += text;
@@ -293,7 +353,12 @@ export default function Header() {
                   </span>
                 </div>
               </div>
-              <div className="guest__card">
+              <div
+                className="guest__card"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 <div className="card--left">
                   <div className="card__title">Children</div>
                   <div className="card__subtitle">Ages 2–12</div>
@@ -320,7 +385,12 @@ export default function Header() {
                   </span>
                 </div>
               </div>
-              <div className="guest__card">
+              <div
+                className="guest__card"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 <div className="card--left">
                   <div className="card__title">Infants</div>
                   <div className="card__subtitle">Under 2</div>
@@ -347,7 +417,12 @@ export default function Header() {
                   </span>
                 </div>
               </div>
-              <div className="guest__card">
+              <div
+                className="guest__card"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 <div className="card--left">
                   <div className="card__title">Pets</div>
                   <div className="card__subtitle">
@@ -391,36 +466,26 @@ export default function Header() {
   const renderSearchForm = () => {
     return (
       <form className="form__search" action="">
-        <div className="form__flex">
+        <div className="form__flex" ref={formFlex}>
           <div
             className={`ip__where ${activeForm === 0 ? "active" : ""}`}
             onClick={() => {
-              setShowCalendar1(false);
-              setShowCalendar2(false);
-
               if (activeForm === 0) {
                 setActiveForm("");
               } else {
                 // set
                 refWhere?.current?.focus();
-                console.log(refWhere);
                 setActiveForm(0);
               }
+              setShowCalendar2(false);
+              setShowCalendar1(false);
             }}
           >
-            <label
-              className="form__label form__label-where"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
+            <label className="form__label form__label-where">
               <span>Where</span>
 
               <input
-                id="#where"
-                onClick={() => {
-                  setActiveForm(0);
-                }}
+                id="where"
                 onChange={handleInputRegionChange}
                 type="text"
                 value={value}
@@ -444,8 +509,23 @@ export default function Header() {
               }
             }}
           >
-            <div className="form__label">Check in</div>
-            <span className="header_span">Add dates</span>
+            <div className="form__label">
+              <label htmlFor="">
+                <span>Check in</span>
+                <input
+                  onChange={() => {}}
+                  placeholder="Add dates"
+                  value={
+                    checkDateIn &&
+                    moment(checkDateIn, ["YYYY-MM-DD", "DD-MM-YYYY"]).format(
+                      "MMM DD"
+                    )
+                  }
+                  type="text"
+                />
+              </label>
+            </div>
+            <span className="header_span"></span>
           </div>
           <div
             className={`checkout ${activeForm === 2 ? "active" : ""}`}
@@ -460,8 +540,22 @@ export default function Header() {
               setShowCalendar2(!isShowCalendar2);
             }}
           >
-            <div className="form__label">Check Out</div>
-            <span className="header_span">Add dates</span>
+            <div className="form__label">
+              <label htmlFor="">
+                <span>Check Out</span>
+                <input
+                  onChange={() => {}}
+                  placeholder="Add dates"
+                  value={
+                    checkDateOut &&
+                    moment(checkDateOut, ["YYYY-MM-DD", "DD-MM-YYYY"]).format(
+                      "MMM DD"
+                    )
+                  }
+                  type="text"
+                />
+              </label>
+            </div>
           </div>
           <div
             className={`ip__who ${activeForm === 3 ? "active" : ""}`}
@@ -479,23 +573,22 @@ export default function Header() {
                 <div className="form__label">Who</div>
                 {renderTotalGuestNumber()}
               </div>
-              <div className="btn--search">
+              <div
+                className="btn--search"
+                onClick={() => {
+                  handleSearch();
+                }}
+              >
                 <i className="fa-solid fa-magnifying-glass"></i>
-                <span
-                  onClick={() => {
-                    handleSearch();
-                  }}
-                >
-                  Search
-                </span>
+                <span>Search</span>
               </div>
             </div>
           </div>
           <div className="header-popupCalendar">
             {isShowCalendar1 || isShowCalendar2 ? <CalendarBook /> : ""}
           </div>
+          {renderExtendSearch()}
         </div>
-        {renderExtendSearch()}
       </form>
     );
   };
@@ -514,9 +607,11 @@ export default function Header() {
     <>
       <div
         ref={ref}
-        className={`header ${activeSearch ? "active__search" : ""}`}
+        className={`header ${
+          activeSearch ? "active__search" : ""
+        } border_around-thin`}
       >
-        <div className="header__top container">
+        <div className="header__top container" ref={headerWrap}>
           <div
             className="logo"
             onClick={() => {

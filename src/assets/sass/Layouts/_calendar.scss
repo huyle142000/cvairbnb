@@ -74,6 +74,7 @@
     display: inline-block;
     width: 100%;
     position: relative;
+    cursor: default;
 }
 
 .calendar-wmy {
@@ -222,12 +223,14 @@
         outline: none;
     }
     .bookForm_pop-up {
+        cursor: default;
         top: 0;
         right: 0;
         position: absolute;
         padding: 30px;
         z-index: 23;
         width: 850px;
+        border-radius: 20px;
         background-color: white;
         .select_dates {
             display: flex;

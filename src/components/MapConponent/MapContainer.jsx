@@ -9,12 +9,13 @@ import { getGeolocationAPI } from "../../redux/actions/LocationRoomAction";
 import CardComponent from "../CardComponent/CardComponent";
 import { bothServiceToken } from "../../services/BothTokenService";
 
-export default function MapContainer() {
+export default function MapContainer(props) {
   const arrRoomModified = [];
   const dispatch = useDispatch();
   const { roomFullList, arrGeolocationRoom } = useSelector(
     (state) => state.LocationRoomReducer
   );
+  const [activeKey, setActiveKey] = useState("first");
   const [showPopup, togglePopup] = useState({});
   const [viewport, setViewport] = useState({
     initialViewState: {
@@ -41,8 +42,10 @@ export default function MapContainer() {
       //match address by name
     });
     getLocationAPI();
-  }, [roomFullList]);
-
+    return () => {
+      setActiveKey("");
+    };
+  }, []);
   useEffect(() => {}, [showPopup]);
   const regionMap = () => {
     let arr = "";
@@ -52,7 +55,6 @@ export default function MapContainer() {
         let indexFound = res.data.features.findIndex((location) => {
           return Number(location.center[0]) > 100;
         });
-        console.log(res.data);
         arr = {
           latitude: res.data.features[0].center[1],
           longtitude: res.data.features[0].center[0],
@@ -61,16 +63,15 @@ export default function MapContainer() {
       .catch((err) => {
         console.log(err);
       });
-    console.log(arr);
   };
   const getLocationAPI = () => {
     return arrRoomModified?.map((room) => {
       dispatch(getGeolocationAPI(room));
     });
   };
-
+ 
   const renderLocation = () => {
-    return arrGeolocationRoom?.map((room) => {
+    return arrGeolocationRoom?.map((room,i) => {
       const { id, giaTien, geolocation } = room;
       const { latitude, longtitude } = geolocation;
       return (
@@ -79,7 +80,8 @@ export default function MapContainer() {
             e.originalEvent.stopPropagation();
             togglePopup({ ...showPopup, showMap: id });
           }}
-          key={`card--map--${id}`}
+          id="adu"
+          key={`card--map--${id}--${activeKey}`}
           latitude={latitude}
           longitude={longtitude}
           offsetLeft={-20}
@@ -110,7 +112,8 @@ export default function MapContainer() {
 
   return (
     <>
-      {regionMap()}
+      <p>{activeKey}</p>
+      {/* {regionMap()} */}
       <div className="map__container">
         <Map
           {...viewport}

@@ -51,7 +51,6 @@ export function editLocationAPI(id, datas, navigate) {
 //get Location
 export function getInfoLocationAPI(id) {
   return async (dispatch) => {
-    console.log(id);
     try {
       const { data } = await bothServiceToken.get(`vi-tri/${id}`);
       dispatch(getInforLocation(data.content));
@@ -216,16 +215,13 @@ export function getGeolocationAPI(room) {
     bothServiceToken
       .getMapBoxGeocoding(room.address)
       .then((res) => {
-        let indexFound = res.data.features.findIndex((location) => {
-          return Number(location.center[0]) > 100;
-        });
         middlewareDispatch(
           getArrGeolocationRoom({
             geoRoom: {
               ...room,
               geolocation: {
-                latitude: res.data.features[indexFound].center[1],
-                longtitude: res.data.features[indexFound].center[0],
+                latitude: res.data?.features[0].center[1],
+                longtitude: res.data?.features[0].center[0],
               },
             },
           })

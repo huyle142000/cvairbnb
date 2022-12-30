@@ -7,50 +7,54 @@ import { roomImage } from "../../utils/roomImage";
 import MapContainer from "../MapConponent/MapContainer";
 
 export default function BodyComponent(props) {
-    const dispatch = useDispatch();
-    const [activeMap, setActiveMap] = useState(false);
-    const { roomFullList } = useSelector((state) => state.LocationRoomReducer);
-    useEffect(() => {
-        dispatch(getListFullRoomAPI());
-    }, []);
+  const dispatch = useDispatch();
+  const [activeMap, setActiveMap] = useState(false);
+  let { roomFullList } = useSelector((state) => state.LocationRoomReducer);
+  
+  useEffect(() => {
+    dispatch(getListFullRoomAPI());
+  }, []);
+  useEffect(() => {
+    if (roomFullList && props.isFilter) {
+      console.log(props.isFilter)
+    }
+  }, [roomFullList]);
 
-    let renderListCard = () => {
-        return roomFullList?.map((card, index) => {
-            return (
-                <Col key={index}>
-                    <CardComponent card={card} />
-                </Col>
-            );
-        });
-    };
+  let renderListCard = () => {
+    return roomFullList?.map((card, index) => {
+      return (
+        <Col key={index}>
+          <CardComponent card={card} />
+        </Col>
+      );
+    });
+  };
 
-    return (
-        <>
-            {!activeMap && (
-                <div className="my_container">
-                    <div
-                        className={`body_grid ${
-                            props.size === 4
-                                ? "body_grid_template1"
-                                : "body_grid_template2"
-                        }`}
-                    >
-                        {renderListCard()}
-                    </div>
-                </div>
-            )}
-            {activeMap && <MapContainer arrRoom={roomFullList} />}
-            <div
-                className="show__map"
-                onClick={() => {
-                    setActiveMap(!activeMap);
-                }}
-            >
-                <div className="btn--show">
-                    {activeMap ? "Show list" : "Show map"}
-                    <i className="fa-solid fa-map"></i>
-                </div>
-            </div>
-        </>
-    );
+  return (
+    <>
+      {!activeMap && (
+        <div className="my_container">
+          <div
+            className={`body_grid ${
+              props.size === 4 ? "body_grid_template1" : "body_grid_template2"
+            }`}
+          >
+            {renderListCard()}
+          </div>
+        </div>
+      )}
+      {activeMap && <MapContainer arrRoom={roomFullList} />}
+      <div
+        className="show__map"
+        onClick={() => {
+          setActiveMap(!activeMap);
+        }}
+      >
+        <div className="btn--show">
+          {activeMap ? "Show list" : "Show map"}
+          <i className="fa-solid fa-map"></i>
+        </div>
+      </div>
+    </>
+  );
 }
