@@ -13,6 +13,7 @@ export default function YourBooking() {
   const { uLogin } = useSelector((state) => state.FormReducer);
   const { inforYourTrips } = useSelector((state) => state.BookTravel);
   const [trips, setTrips] = useState([]);
+   console.log(inforYourTrips)
   useEffect(() => {
     dispatch(getInforTripsAPI(uLogin.id));
     return () => {

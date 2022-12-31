@@ -4,7 +4,8 @@ const initialState = {
   checkDateIn: "",
   checkDateOut: "",
   checkDateOutLimit: "",
-
+  checkInRequest: "",
+  checkOutRequest: "",
   arrCheckDateBefore: [],
   arrCheckDateIsBooked: [],
 };
@@ -17,6 +18,12 @@ export const CalendarReducer = createSlice({
     },
     getCheckOut: (state, action) => {
       state.checkDateOut = action.payload;
+    },
+    getCheckInRequest: (state, action) => {
+      state.checkInRequest = action.payload;
+    },
+    getCheckOutRequest: (state, action) => {
+      state.checkOutRequest = action.payload;
     },
     getLimitCheckOut: (state, action) => {
       state.checkDateOutLimit = action.payload;
@@ -36,5 +43,7 @@ export const {
   getCheckOut,
   getCheckDateBefore,
   getDateIsBooked,
+  getCheckInRequest,
+  getCheckOutRequest,
 } = CalendarReducer.actions;
 export default CalendarReducer.reducer;

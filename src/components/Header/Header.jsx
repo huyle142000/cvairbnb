@@ -13,18 +13,30 @@ import CalendarBook from "../../pages/BookingTravel/CalendarBook/CalendarBook";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { getRequestListTrips } from "../../redux/reducer/BookTravel";
+import {
+  getCheckInRequest,
+  getCheckOutRequest,
+} from "../../redux/reducer/CalendarReducer";
 
 export default function Header() {
   const navigate = useNavigate();
   // reducer
-  const { checkDateIn, checkDateOut } = useSelector(
+
+  const { checkInRequest, checkOutRequest } = useSelector(
     (state) => state.CalendarReducer
   );
   // ref
   const formFlex = useRef();
   const headerWrap = useRef();
 
-  let arrCheckEleHeaderNav = ["span_popup-location", "btn--def"];
+  let arrCheckEleHeaderNav = [
+    "span_popup-location",
+    "btn--def",
+    "search__icon",
+    "search__display",
+    "search__icon-glass",
+    "exp__flex",
+  ];
   useEffect(() => {
     const handleClickFormSearch = (e) => {
       if (formFlex) {
@@ -115,16 +127,43 @@ export default function Header() {
     } else {
       locationValue = locationFirstFind;
     }
+    let dateOutRequest;
+    if (!checkOutRequest) {
+      dateOutRequest = moment(checkInRequest, ["DD-MM-YYYY", "YYYY-MM-DD"])
+        .clone()
+        .add(1, "day");
+      dispatch(getCheckOutRequest(dateOutRequest));
+    } else {
+      dateOutRequest = checkOutRequest;
+    }
     let request = {
-      location: locationValue,
-      checkInRequest: checkDateIn,
-      checkOutRequest: checkDateOut,
+      locationRequest: locationValue,
+      checkInRequest: checkInRequest,
+      checkOutRequest: dateOutRequest,
       guestRequest: totalGuest,
     };
     if (locationValue) {
       dispatch(getRequestListTrips(request));
+      setActvieSearch(false);
+
+      //
+      setValueInput("");
+      setActiveForm("");
+      //
+      setShowCalendar1(false);
+      setShowCalendar2(false);
+      //
+      dispatch(getCheckInRequest(""));
+      dispatch(getCheckOutRequest(""));
+      //
+      setAdultsNum(0);
+      setChidNum(0);
+      setInfantsNum(0);
+      setPetNum(0);
       navigate(`roomsearch/${locationValue}`);
     } else {
+      navigate("/");
+
       setActvieSearch(false);
     }
   };
@@ -197,7 +236,7 @@ export default function Header() {
                 Add guests
               </button>
               <span className="search__icon">
-                <i className="fa-solid fa-magnifying-glass"></i>
+                <i className="search__icon-glass fa-solid fa-magnifying-glass"></i>
               </span>
             </span>
           </div>
@@ -205,21 +244,9 @@ export default function Header() {
       );
     } else {
       return (
-        <div
-          className="header__exp"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <div className="header__exp">
           <div className="exp__flex">
-            <span
-              className="span_popup-location active "
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              Stays
-            </span>
+            <span className="span_popup-location active ">Stays</span>
             <span>Experiences</span>
           </div>
           <span>Online Experiences</span>
@@ -312,7 +339,6 @@ export default function Header() {
     });
     return regionName;
   };
-
   const renderExtendSearch = () => {
     //extend region search
     if (activeForm === 0) {
@@ -516,8 +542,8 @@ export default function Header() {
                   onChange={() => {}}
                   placeholder="Add dates"
                   value={
-                    checkDateIn &&
-                    moment(checkDateIn, ["YYYY-MM-DD", "DD-MM-YYYY"]).format(
+                    checkInRequest &&
+                    moment(checkInRequest, ["YYYY-MM-DD", "DD-MM-YYYY"]).format(
                       "MMM DD"
                     )
                   }
@@ -547,10 +573,11 @@ export default function Header() {
                   onChange={() => {}}
                   placeholder="Add dates"
                   value={
-                    checkDateOut &&
-                    moment(checkDateOut, ["YYYY-MM-DD", "DD-MM-YYYY"]).format(
-                      "MMM DD"
-                    )
+                    checkOutRequest &&
+                    moment(checkOutRequest, [
+                      "YYYY-MM-DD",
+                      "DD-MM-YYYY",
+                    ]).format("MMM DD")
                   }
                   type="text"
                 />
@@ -585,7 +612,11 @@ export default function Header() {
             </div>
           </div>
           <div className="header-popupCalendar">
-            {isShowCalendar1 || isShowCalendar2 ? <CalendarBook /> : ""}
+            {isShowCalendar1 || isShowCalendar2 ? (
+              <CalendarBook filterRoom={true} />
+            ) : (
+              ""
+            )}
           </div>
           {renderExtendSearch()}
         </div>

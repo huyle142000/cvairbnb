@@ -9,7 +9,7 @@ export const useCheckDate = (props) => {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    if (arrCheckDateIsBooked.length === 0) {
+    if (arrCheckDateIsBooked.length === 0 && props?.filter === undefined) {
       dispatch(getDateIsBookedAPI(props?.codeRoom));
     }
   }, [props?.codeRoom]);
@@ -106,7 +106,7 @@ export const useCheckDate = (props) => {
   };
   let dateAfterCheckIn = "";
   let abc = [];
-  const getLimitCheckOutAfterCheckIn = (convertCheckIn, getDayCheckOut) => {
+  const getLimitCheckOutAfterCheckIn = (convertCheckIn) => {
     //Get date after check-In
     let array = [];
     arrCheckDateIsBooked?.map((dateBooked) => {
@@ -133,7 +133,7 @@ export const useCheckDate = (props) => {
       //Get date after check-In
       let array = getLimitCheckOutAfterCheckIn(convertCheckIn);
 
-      if (array.length !== 0) {
+      if (array.length !== 0 && props?.filterRoom === undefined) {
         if (dateOutCheck.length === 0) {
           dateOutCheck.push(array[0]);
         }

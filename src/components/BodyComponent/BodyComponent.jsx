@@ -5,23 +5,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { getListFullRoomAPI } from "../../redux/actions/LocationRoomAction";
 import { roomImage } from "../../utils/roomImage";
 import MapContainer from "../MapConponent/MapContainer";
+import { closeSpinner, openSpinner } from "../../redux/reducer/Loading";
+import { getDateBookedToFilterAPI } from "../../redux/actions/CalendarAction";
 
 export default function BodyComponent(props) {
   const dispatch = useDispatch();
   const [activeMap, setActiveMap] = useState(false);
   let { roomFullList } = useSelector((state) => state.LocationRoomReducer);
-  
+  const [arrListRoom, setListRoom] = useState([]);
+  let { isFilter, arrListRoomRequest } = props;
   useEffect(() => {
     dispatch(getListFullRoomAPI());
   }, []);
   useEffect(() => {
-    if (roomFullList && props.isFilter) {
-      console.log(props.isFilter)
+    if (roomFullList && props.isFilter === undefined) {
+      setListRoom(roomFullList);
     }
-  }, [roomFullList]);
+    if (isFilter) {
+      let handleRequestRoom = roomFullList.filter((room) => {
+        if (arrListRoomRequest.includes(room.id)) {
+          return room;
+        }
+      });
+      setListRoom(handleRequestRoom);
+    }
+  }, [roomFullList, props?.isFilter]);
 
   let renderListCard = () => {
-    return roomFullList?.map((card, index) => {
+    return arrListRoom?.map((card, index) => {
       return (
         <Col key={index}>
           <CardComponent card={card} />
@@ -43,7 +54,7 @@ export default function BodyComponent(props) {
           </div>
         </div>
       )}
-      {activeMap && <MapContainer arrRoom={roomFullList} />}
+      {activeMap && <MapContainer arrRoom={arrListRoom} />}
       <div
         className="show__map"
         onClick={() => {

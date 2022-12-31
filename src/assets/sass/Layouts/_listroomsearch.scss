@@ -16,18 +16,20 @@
     .show__map {
         display: none;
     }
-    .card-name {
-        .card_name_text {
-            font-size: 15px;
-        }
-    }
+
     .card_des,
     .card_time {
-       font-size: 13px;
+        font-size: 13px;
     }
     .card_item {
-        .card_img{
+        .card_img {
             height: 230px;
+        }
+        .card_name {
+            margin-bottom: 20px;
+            .card_name_text {
+                font-size: 15px;
+            }
         }
     }
 }

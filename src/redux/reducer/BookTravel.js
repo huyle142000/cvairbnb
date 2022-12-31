@@ -10,6 +10,8 @@ const initialState = {
   guestChildren: 0,
   guestInfants: 0,
   guestPets: 0,
+
+  arrListRoomRequest: [],
 };
 export const BookTravel = createSlice({
   name: "BookTravel",
@@ -39,10 +41,14 @@ export const BookTravel = createSlice({
     getRequestListTrips: (state, action) => {
       state.requestListRoom = action.payload;
     },
+    getListRoomRequest: (state, action) => {
+      state.arrListRoomRequest = action.payload;
+    },
   },
 });
 //truyền action
 export const {
+  getListRoomRequest,
   getRequestListTrips,
   getInforYourTrips,
   getInforDateToBook,

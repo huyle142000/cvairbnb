@@ -4,7 +4,9 @@ import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCheckIn,
+  getCheckInRequest,
   getCheckOut,
+  getCheckOutRequest,
   getLimitCheckOut,
 } from "../../../redux/reducer/CalendarReducer";
 
@@ -19,9 +21,8 @@ function CalendarBook(props) {
     props.inforRoom
   );
   //Selector
-  const { checkDateIn, checkDateOut } = useSelector(
-    (state) => state.CalendarReducer
-  );
+  const { checkDateIn, checkDateOut, checkInRequest, checkOutRequest } =
+    useSelector((state) => state.CalendarReducer);
   useEffect(() => {}, [checkInRef, checkOutRef]);
   //
 
@@ -70,13 +71,23 @@ function CalendarBook(props) {
     arrCalendarDate();
   }, [value]);
   useEffect(() => {
-    if (checkDateIn !== "") {
-      setCheckIn(moment(checkDateIn));
+    let dateIn;
+    let dateOut;
+    // Xét điều kiện nếu props có filterroom thì lấy dispatch riêng
+    if (props.filterRoom) {
+      dateIn = checkInRequest;
+      dateOut = checkOutRequest;
+    } else {
+      dateIn = checkDateIn;
+      dateOut = checkDateOut;
+    }
+    if (dateIn !== "") {
+      setCheckIn(moment(dateIn));
     } else {
       setCheckIn("");
     }
-    if (checkDateOut !== "") {
-      setCheckOut(moment(checkDateOut));
+    if (dateOut !== "") {
+      setCheckOut(moment(dateOut));
     } else {
       setCheckOut("");
     }
@@ -109,7 +120,52 @@ function CalendarBook(props) {
       </>
     );
   };
-  const renderCalendar = (calendar, startDay, value, number) => {
+  const handleDateDispatch = (day) => {
+    if (props.filterRoom) {
+      if (checkInRequest !== "") {
+        setCheckOut(day);
+        dispatch(
+          getCheckOutRequest(moment(moment(day, "DD-MM-YYYY"), "DD-MM-YYYY"))
+        );
+      } else {
+        setCheckIn(day);
+        dispatch(
+          getCheckInRequest(moment(moment(day, "DD-MM-YYYY"), "DD-MM-YYYY"))
+        );
+      }
+      if (checkInRequest !== "" && checkOutRequest !== "") {
+        if (moment(checkInRequest).isSame(day, "day")) {
+          setCheckIn("");
+          setCheckOut("");
+          dispatch(getCheckInRequest(""));
+          dispatch(getCheckOutRequest(""));
+        } else {
+          setCheckOut(day);
+          dispatch(getCheckOutRequest(day));
+        }
+      }
+    } else {
+      if (checkIn !== "") {
+        setCheckOut(day);
+        dispatch(getCheckOut(moment(moment(day, "DD-MM-YYYY"), "DD-MM-YYYY")));
+      } else {
+        setCheckIn(day);
+        dispatch(getCheckIn(moment(moment(day, "DD-MM-YYYY"), "DD-MM-YYYY")));
+      }
+      if (checkIn !== "" && checkOut !== "") {
+        if (moment(checkIn).isSame(day, "day")) {
+          setCheckIn("");
+          setCheckOut("");
+          dispatch(getCheckIn(""));
+          dispatch(getCheckOut(""));
+        } else {
+          setCheckOut(day);
+          dispatch(getCheckOut(day));
+        }
+      }
+    }
+  };
+  const renderCalendar = (calendar, startDay) => {
     return (
       <>
         {calendar.map((week, index) => {
@@ -135,39 +191,13 @@ function CalendarBook(props) {
                         className={`${paddingDay(day)} ${checkDay(
                           day,
                           checkIn
-                        )} ${checkDateIsBooked(day)} ${checkInOutDay(
-                          day,
-                          checkIn,
-                          checkOut
-                        )}
+                        )} ${
+                          props.filterRoom === undefined &&
+                          checkDateIsBooked(day)
+                        } ${checkInOutDay(day, checkIn, checkOut)}
                          `}
                         onClick={() => {
-                          if (checkIn !== "") {
-                            setCheckOut(day);
-                            dispatch(
-                              getCheckOut(
-                                moment(moment(day, "DD-MM-YYYY"), "DD-MM-YYYY")
-                              )
-                            );
-                          } else {
-                            setCheckIn(day);
-                            dispatch(
-                              getCheckIn(
-                                moment(moment(day, "DD-MM-YYYY"), "DD-MM-YYYY")
-                              )
-                            );
-                          }
-                          if (checkIn !== "" && checkOut !== "") {
-                            if (moment(checkIn).isSame(day, "day")) {
-                              setCheckIn("");
-                              setCheckOut("");
-                              dispatch(getCheckIn(""));
-                              dispatch(getCheckOut(""));
-                            } else {
-                              setCheckOut(day);
-                              dispatch(getCheckOut(day));
-                            }
-                          }
+                          handleDateDispatch(day);
                         }}
                       >
                         {day.format("D")}
@@ -207,7 +237,7 @@ function CalendarBook(props) {
                   <i className="fa-solid fa-angle-left"></i>
                 </div>
               )}
-              {renderCalendar(calendar, startDay, checkIn, 1)}
+              {renderCalendar(calendar, startDay)}
               <div
                 className="increase_calendar calendar-icon_month increase_calendar-lg"
                 onClick={() => {
@@ -234,7 +264,7 @@ function CalendarBook(props) {
               >
                 <i className="fa-solid fa-angle-right"></i>
               </div>
-              {renderCalendar(calendar2, startDay2, checkOut, 2)}
+              {renderCalendar(calendar2, startDay2)}
             </div>
           </div>
         </div>
