@@ -21,15 +21,16 @@ export default function BodyComponent(props) {
     if (roomFullList && props.isFilter === undefined) {
       setListRoom(roomFullList);
     }
-    if (isFilter) {
+    if (isFilter && arrListRoomRequest) {
       let handleRequestRoom = roomFullList.filter((room) => {
         if (arrListRoomRequest.includes(room.id)) {
           return room;
         }
       });
+      console.log(handleRequestRoom);
       setListRoom(handleRequestRoom);
     }
-  }, [roomFullList, props?.isFilter]);
+  }, [roomFullList, props?.isFilter, arrListRoomRequest]);
 
   let renderListCard = () => {
     return arrListRoom?.map((card, index) => {

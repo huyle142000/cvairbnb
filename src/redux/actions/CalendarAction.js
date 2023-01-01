@@ -112,8 +112,6 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
       }
       arrFilters = _.uniqBy(arrFilters, "maPhong");
       // Trường hợp lọc có vị trí lấy thêm thông tin về Vị trí rồi đẩy vào arrTrips
-      console.log(locationRequest);
-      console.log(requestData);
       if (locationRequest) {
         let arrTrips = [];
         for (let index = 0; index < arrFilters.length; index++) {
@@ -196,12 +194,10 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
             }
           }
         });
-        console.log(arrIdValidRoom);
         validArrListRom = arrIdValidRoom;
-        // console.log(requestData, "requestData");
       }
+      console.log(validArrListRom)
       dispatch(getListRoomRequest(validArrListRom));
-      console.log(arrFilters, "arrFilters");
     } catch (error) {
       console.log(error.response);
     }

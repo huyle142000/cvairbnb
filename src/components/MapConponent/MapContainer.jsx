@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { useState } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
 import { MAP_BOX_TOKEN } from "../../utils/setting";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGeolocationAPI } from "../../redux/actions/LocationRoomAction";
 import CardComponent from "../CardComponent/CardComponent";
-import { bothServiceToken } from "../../services/BothTokenService";
+import { isBuffer } from "lodash";
 
 export default function MapContainer(props) {
   const arrRoomModified = [];
@@ -15,15 +15,32 @@ export default function MapContainer(props) {
   const { roomFullList, arrGeolocationRoom } = useSelector(
     (state) => state.LocationRoomReducer
   );
-  const [activeKey, setActiveKey] = useState("first");
   const [showPopup, togglePopup] = useState({});
   const [viewport, setViewport] = useState({
     initialViewState: {
-      latitude: 15.127333464868,
-      longitude: 101.017437716385,
+      latitude: 46.5362364654109,
+      longtitude: 108.168944342317,
       zoom: 6,
     },
   });
+
+  const mapRef = useRef("");
+  const onSelectCity = useCallback((view) => {
+    if (view) {
+      mapRef.current?.flyTo({
+        center: [view.longitude, view.latitude],
+        duration: 2000,
+      });
+    }
+  }, []);
+  useEffect(() => {
+    if (props.viewRequest && mapRef) {
+      onSelectCity(props.viewRequest);
+    }
+    setTimeout(() => {
+      onSelectCity(props.viewRequest);
+    }, 2000);
+  }, [props?.viewRequest]);
 
   useEffect(() => {
     roomFullList?.map((room) => {
@@ -42,36 +59,17 @@ export default function MapContainer(props) {
       //match address by name
     });
     getLocationAPI();
-    return () => {
-      setActiveKey("");
-    };
   }, []);
   useEffect(() => {}, [showPopup]);
-  const regionMap = () => {
-    let arr = "";
-    bothServiceToken
-      .getMapBoxGeocoding("Thailand")
-      .then((res) => {
-        let indexFound = res.data.features.findIndex((location) => {
-          return Number(location.center[0]) > 100;
-        });
-        arr = {
-          latitude: res.data.features[0].center[1],
-          longtitude: res.data.features[0].center[0],
-        };
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   const getLocationAPI = () => {
     return arrRoomModified?.map((room) => {
       dispatch(getGeolocationAPI(room));
     });
   };
- 
+
   const renderLocation = () => {
-    return arrGeolocationRoom?.map((room,i) => {
+    return arrGeolocationRoom?.map((room) => {
       const { id, giaTien, geolocation } = room;
       const { latitude, longtitude } = geolocation;
       return (
@@ -80,8 +78,11 @@ export default function MapContainer(props) {
             e.originalEvent.stopPropagation();
             togglePopup({ ...showPopup, showMap: id });
           }}
-          id="adu"
-          key={`card--map--${id}--${activeKey}`}
+          key={`${
+            props.dataFilter === undefined
+              ? `card--map--${id}`
+              : `card--filter--${id}`
+          }`}
           latitude={latitude}
           longitude={longtitude}
           offsetLeft={-20}
@@ -112,11 +113,15 @@ export default function MapContainer(props) {
 
   return (
     <>
-      <p>{activeKey}</p>
-      {/* {regionMap()} */}
-      <div className="map__container">
+      <div
+        className={`map__container ${
+          props.dataFilter !== undefined ? "filter" : ""
+        }`}
+      >
         <Map
+          ref={mapRef}
           {...viewport}
+          initialViewState={viewport}
           mapStyle="mapbox://styles/mapbox/streets-v9"
           onViewportChange={(viewport) => setViewport(viewport)}
           mapboxAccessToken={MAP_BOX_TOKEN}

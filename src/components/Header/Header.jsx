@@ -30,12 +30,15 @@ export default function Header() {
   const headerWrap = useRef();
 
   let arrCheckEleHeaderNav = [
+    "dot",
     "span_popup-location",
     "btn--def",
     "search__icon",
     "search__display",
     "search__icon-glass",
     "exp__flex",
+    "header__exp",
+    "header__border"
   ];
   useEffect(() => {
     const handleClickFormSearch = (e) => {
@@ -43,6 +46,7 @@ export default function Header() {
         if (!formFlex?.current?.contains(e.target)) {
           if (arrCheckEleHeaderNav.includes(e.target.classList[0])) {
             setActiveForm(0);
+            refWhere?.current?.focus();
           } else {
             setActiveForm("");
           }
