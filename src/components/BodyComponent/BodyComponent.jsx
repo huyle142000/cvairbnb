@@ -27,7 +27,6 @@ export default function BodyComponent(props) {
           return room;
         }
       });
-      console.log(handleRequestRoom);
       setListRoom(handleRequestRoom);
     }
   }, [roomFullList, props?.isFilter, arrListRoomRequest]);

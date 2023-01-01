@@ -132,7 +132,6 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
           });
         }
 
-        // console.log(arrTrips, "array");
         function stringToSlug(str) {
           // remove accents
           var from =
@@ -186,7 +185,6 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
           if (checkLocation.length === 1) {
             if (checkValidViTri || checkValidTinhThanh || checkValidQuocGia) {
               arrIdValidRoom.push(trip.maPhong);
-              console.log(locationRequest);
             }
           } else {
             if (checkValidViTri || (checkValidTinhThanh && checkValidQuocGia)) {
@@ -196,7 +194,6 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
         });
         validArrListRom = arrIdValidRoom;
       }
-      console.log(validArrListRom)
       dispatch(getListRoomRequest(validArrListRom));
     } catch (error) {
       console.log(error.response);
