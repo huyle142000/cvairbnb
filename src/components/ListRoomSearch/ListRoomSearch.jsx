@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDateBookedToFilterAPI } from "../../redux/actions/CalendarAction";
 import { getListFullRoomAPI } from "../../redux/actions/LocationRoomAction";
+import { getListRoomRequest } from "../../redux/reducer/BookTravel";
 import { bothServiceToken } from "../../services/BothTokenService";
 import BodyComponent from "../BodyComponent/BodyComponent";
 import MapContainer from "../MapConponent/MapContainer";
@@ -12,8 +13,6 @@ export default function ListRoomSearch(props) {
   let { requestListRoom, arrListRoomRequest } = useSelector(
     (state) => state.BookTravel
   );
-
-  let [isShowMap, setShow] = useState(true);
   let { roomFullList } = useSelector((state) => state.LocationRoomReducer);
   useEffect(() => {
     if (arrListRoomRequest.length === 0) {
@@ -21,8 +20,17 @@ export default function ListRoomSearch(props) {
     }
   }, [arrListRoomRequest]);
   useEffect(() => {
+    return () => {
+      dispatch(getListRoomRequest([]));
+    };
+  }, []);
+  useEffect(() => {
     if (requestListRoom) {
-      regionMap(requestListRoom?.locationRequest);
+      let { locationRequest } = requestListRoom;
+      if (locationRequest) {
+        locationRequest = locationRequest.split();
+        regionMap(locationRequest[locationRequest.length - 1]);
+      }
     }
   }, [requestListRoom]);
   const [viewport, setViewport] = useState(props?.requestListRoom);
@@ -42,13 +50,13 @@ export default function ListRoomSearch(props) {
   return (
     <div className="list_room-filter">
       <div className="row">
-        <div className="col-8">
+        <div className="col-12 col-md-7">
           <BodyComponent
             isFilter={true}
             arrListRoomRequest={arrListRoomRequest}
           />
         </div>
-        <div className="col-4">
+        <div className="col-12 col-md-5">
           <div className="map_filter">
             <MapContainer filerRoom={"filter"} viewRequest={viewport} />
           </div>

@@ -39,17 +39,20 @@ export default function CardComponent(props) {
     <div
       className={`card_item ${
         props.isActiveMap === undefined ? "" : "card__map"
-      }`}
+      } ${props.filerRoom && "request_room"}`}
     >
       <div className="card_img">
         <ImageSlider image={img} id={id} />
         <div className="card_img_icon">{SVG()}</div>
       </div>
-      <div className="card_content" onClick={()=>{
-        navigate(`/bookingtravel/${id}`)
-      }}>
+      <div
+        className="card_content"
+        onClick={() => {
+          navigate(`/bookingtravel/${id}`);
+        }}
+      >
         <div className="card_name">
-          <div className="card_name_text">
+          <div className={`card_name_text`}>
             {tenPhong.length > 50
               ? tenPhong.substring(0, 50) + "..."
               : tenPhong}

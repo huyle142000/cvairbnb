@@ -29,7 +29,8 @@ export default function MapContainer(props) {
     if (view) {
       mapRef.current?.flyTo({
         center: [view.longitude, view.latitude],
-        duration: 2000,
+        zoom: 6,
+        duration: 1000,
       });
     }
   }, []);
@@ -39,34 +40,17 @@ export default function MapContainer(props) {
     }
     setTimeout(() => {
       onSelectCity(props.viewRequest);
-    }, 2000);
+    }, 1000);
   }, [props?.viewRequest]);
 
   useEffect(() => {
     roomFullList?.map((room) => {
       const { id } = room;
-      //match address in default array
-      let addrIndex = roomAddress.findIndex((room) => {
-        return room.id === id;
-      });
-      if (addrIndex !== -1) {
-        arrRoomModified.push({
-          ...room,
-          address: roomAddress[addrIndex].address,
-        });
-      }
-
-      //match address by name
-    });
-    getLocationAPI();
-  }, []);
-  useEffect(() => {}, [showPopup]);
-
-  const getLocationAPI = () => {
-    return arrRoomModified?.map((room) => {
+      // Get Longitude and Latitude
       dispatch(getGeolocationAPI(room));
     });
-  };
+  }, []);
+  useEffect(() => {}, [showPopup]);
 
   const renderLocation = () => {
     return arrGeolocationRoom?.map((room) => {
@@ -103,7 +87,11 @@ export default function MapContainer(props) {
               }}
               anchor="top-right"
             >
-              <CardComponent isActiveMap={false} card={room} />
+              <CardComponent
+                isActiveMap={false}
+                card={room}
+                filerRoom={props.filerRoom}
+              />
             </Popup>
           )}
         </Marker>

@@ -59,7 +59,7 @@ export default function AddRoom() {
             name="mayGiat"
             onChange={handleChangeSetFieldValue("mayGiat")}
           />
-          ;
+          
         </Form.Item>
         <Form.Item label="Bàn Là">
           <Switch name="banLa" onChange={handleChangeSetFieldValue("banLa")} />

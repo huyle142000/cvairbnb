@@ -35,7 +35,7 @@ export default function BodyComponent(props) {
     return arrListRoom?.map((card, index) => {
       return (
         <Col key={index}>
-          <CardComponent card={card} />
+          <CardComponent card={card} isFilter={props.isFilter} />
         </Col>
       );
     });

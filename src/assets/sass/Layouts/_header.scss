@@ -5,6 +5,9 @@
     right: 0;
     z-index: 999;
     background-color: $color-white;
+    .header-svg_lg {
+        display: none !important;
+    }
     @include styleText($color-black-2, $fs-1, inherit, inherit);
     .logo {
         display: inline-block;
@@ -408,3 +411,82 @@
     background-color: rgba(0, 0, 0, 0.25);
     height: 100%;
 }
+@include responsive("medium") {
+    .header__right {
+        h6 {
+            font-size: 12px;
+        }
+    }
+    .form_user .form_user-icon {
+        padding: 4px !important;
+    }
+    .form_user {
+        .form_user-icon {
+            i {
+                font-size: 10px !important;
+            }
+            img {
+                width: 22px !important;
+                height: 22px !important;
+            }
+        }
+    }
+    .header .header__top .logo svg {
+        display: none;
+    }
+    .header .logo {
+        width: 100px;
+    }
+    .header {
+        padding: 10px !important;
+        .btn--def {
+            padding: 6px 8px;
+        }
+        .header__search {
+            .btn--left {
+                padding-left: 8px;
+            }
+            .search__icon {
+                font-size: 12px;
+                width: 20px;
+                line-height: 20px;
+            }
+        }
+    }
+}
+
+@include responsive("large") {
+    .logo {
+        width: 0 !important;
+    }
+    .header .header__search .btn--left {
+        padding-left: 8px;
+    }
+    .header .btn--def {
+        padding: 10px 10px;
+    }
+    .header_responsive {
+        .header-svg_lg {
+            display: block !important;
+        }
+        .header_lg-text {
+            display: none !important;
+        }
+    }
+}
+@include responsive("small") {
+    .btn--def {
+        padding: 14px 5px;
+    }
+    .header .header__search .btn--left {
+        padding-left: 10px;
+    }
+   
+    .header .btn--def {
+        padding: 10px 12px;
+    }
+    .header__right {
+        display: none !important;
+    }
+}
+

@@ -250,9 +250,10 @@ export default function Details(props) {
       <div className="detail-room_header" id="photos">
         <h2>{inforRoom?.tenPhong}</h2>
         <div className="star_comment">
+          {console.log(starComment)}
           <span>
             <i className="fa-solid fa-star"></i>
-            {starComment?.star} -
+            {isNaN(starComment?.star) ? "No reviews yet" : starComment.star} -
           </span>
           <span> {`${starComment?.total}`} reviews - </span>
 

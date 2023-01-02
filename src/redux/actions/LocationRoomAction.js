@@ -25,10 +25,12 @@ export function getListLocationAPI() {
   };
 }
 // upLoad
-export function uploadLocation(datas) {
+export function uploadLocation(datas, navigate) {
   return async (dispatch) => {
     try {
       const { data } = await bothServiceToken.post("vi-tri", datas);
+      getListLocationAPI();
+      // navigate(-1);
       toast.success("Success");
     } catch (e) {
       toast.error("Error!!!");
@@ -98,44 +100,6 @@ export function getListFullRoomAPI() {
     }
   };
 }
-//get booking room
-// export function getBookingRoomAPI(dataFilter, roomId) {
-//   return (middlewareDispatch) => {
-//     bothServiceToken
-//       .get(`dat-phong`)
-//       .then((res) => {
-//         let roomArr = res.data.content?.filter((booking) => {
-//           return roomId === booking.maPhong;
-//         });
-//         const { checkin, checkout } = dataFilter;
-//         const sortedArray = roomArr?.sort((a, b) => {
-//           return (
-//             moment(a.ngayDen).format("YYYYMMDD") -
-//             moment(b.ngayDen).format("YYYYMMDD")
-//           );
-//         });
-//         let checkValidDate = true;
-//         if (sortedArray.length > 0) {
-//           for (let i = 0; i < sortedArray.length; i++) {
-//             let { ngayDen, ngayDi } = sortedArray[i];
-//             if (moment(checkin).isBefore(ngayDi)) {
-//               if (moment(checkout).isAfter(ngayDen)) {
-//                 checkValidDate = false;
-//                 break;
-//               }
-//             }
-//           }
-//           if (checkValidDate) {
-//             middlewareDispatch(getRoomIdFilter(roomId));
-//           }
-//         }
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// }
-
 //IdRoom
 export function getListRoomAPI(id) {
   return async (dispatch) => {
@@ -157,7 +121,7 @@ export function uploadRoomAPI(datas, navigate) {
   return async (dispatch) => {
     try {
       const { data } = await bothServiceToken.post("phong-thue", datas);
-      navigate(-1);
+      // navigate(-1);
       toast.success("Success");
     } catch (e) {
       console.log(e.response.data);
@@ -170,9 +134,8 @@ export function editRoomAPI(id, datas, navigate) {
   return async (dispatch) => {
     try {
       const { data } = await bothServiceToken.put(`phong-thue/${id}`, datas);
+      getListRoomAPI(id)
       await navigate(-1);
-      await navigate(0);
-
       toast.success("Thành công!!!");
     } catch (e) {
       toast.error("Error!!!");
@@ -213,7 +176,7 @@ export function deleteRoomAPI(id, navigate) {
 export function getGeolocationAPI(room) {
   return (middlewareDispatch) => {
     bothServiceToken
-      .getMapBoxGeocoding(room.address)
+      .getMapBoxGeocoding(room.tenPhong)
       .then((res) => {
         middlewareDispatch(
           getArrGeolocationRoom({

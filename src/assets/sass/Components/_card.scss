@@ -197,3 +197,31 @@
         }
     }
 }
+
+@include responsive("large") {
+    .body_grid_template1{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .card_item .card_img {
+        height: 150px;
+    }
+    .card_item .card_name .card_name_text {
+        margin-bottom: 13px;
+        font-size: 11px;
+    }
+    .card_item .card_des,
+    .card_item .card_time {
+        font-size: 11px;
+    }
+    .card_item .card_price {
+        font-size: 11px;
+    }
+    .card_item .card_name .card_name_icon {
+        font-size: 11px;
+    }
+}
+@include responsive("small") {
+    .body_grid_template1{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

@@ -1,10 +1,12 @@
 import { Formik, useFormik } from "formik";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { uploadLocation } from "../../../../redux/actions/LocationRoomAction";
 
 export const useAddLocation = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   //   formik
   const formik = useFormik({
     initialValues: {
@@ -15,7 +17,7 @@ export const useAddLocation = () => {
       hinhAnh: "string",
     },
     onSubmit: (values, { resetForm }) => {
-      dispatch(uploadLocation(values));
+      dispatch(uploadLocation(values,navigate));
     },
   });
   let [imgSrc, setImgSrc] = useState("");
