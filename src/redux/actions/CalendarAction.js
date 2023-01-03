@@ -33,14 +33,18 @@ export const getDateIsBookedAPI = (id) => {
     }
   };
 };
-export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
+export const getDateBookedToFilterAPI = (requestData) => {
   return async (dispatch) => {
-    await dispatch(openSpinner());
+    await dispatch(openSpinner())
     try {
       // lấy thông tin ngày đặt của các phòng
+      let result = await bothServiceToken.get("phong-thue");
       let { data } = await bothServiceToken.get("dat-phong");
       let response = await bothServiceToken.get("vi-tri");
+      //
+      let roomFullList = await result.data.content;
       let arrExistLocation = [];
+      //
       await response.data.content?.map((vitri) => {
         arrExistLocation.push(vitri.id);
       });
@@ -115,13 +119,6 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
             (moment(room.ngayDen).isAfter(checkOutRequest, "day") &&
               moment(room.ngayDi).isAfter(checkOutRequest, "day"))
           ) {
-            // if (guestRequest > 0) {
-            //   if (room.soLuongKhach >= guestRequest) {
-            //     return room;
-            //   }
-            // } else {
-            //   return room;
-            // }
           } else {
             return room.maPhong;
           }
@@ -243,11 +240,12 @@ export const getDateBookedToFilterAPI = (requestData, roomFullList) => {
             }
           }
         });
-        
+
         validArrListRom = arrIdValidRoom;
       }
       if (validArrListRom.length > 0) {
         await dispatch(getListRoomRequest(validArrListRom));
+        return 123
       }
     } catch (error) {
       console.log(error.response);

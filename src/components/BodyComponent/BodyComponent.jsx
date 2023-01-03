@@ -21,6 +21,8 @@ export default function BodyComponent(props) {
     if (roomFullList && props.isFilter === undefined) {
       setListRoom(roomFullList);
     }
+  }, [roomFullList]);
+  useEffect(() => {
     if (isFilter && arrListRoomRequest) {
       let handleRequestRoom = roomFullList.filter((room) => {
         if (arrListRoomRequest.includes(room.id)) {
@@ -29,7 +31,7 @@ export default function BodyComponent(props) {
       });
       setListRoom(handleRequestRoom);
     }
-  }, [roomFullList, props?.isFilter, arrListRoomRequest]);
+  }, [arrListRoomRequest]);
 
   let renderListCard = () => {
     return arrListRoom?.map((card, index) => {

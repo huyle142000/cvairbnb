@@ -78,7 +78,7 @@ export function deleteLocationAPI(id, navigate) {
 //Full-Rooms
 export function getListFullRoomAPI() {
   return async (dispatch) => {
-    await dispatch(openSpinner(true));
+    await dispatch(openSpinner());
     try {
       const { data } = await bothServiceToken.get(`phong-thue`);
       let arrRoom = [];
