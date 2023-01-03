@@ -245,7 +245,6 @@ export const getDateBookedToFilterAPI = (requestData) => {
       }
       if (validArrListRom.length > 0) {
         await dispatch(getListRoomRequest(validArrListRom));
-        return 123
       }
     } catch (error) {
       console.log(error.response);
