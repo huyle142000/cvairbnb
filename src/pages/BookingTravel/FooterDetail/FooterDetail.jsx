@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getListCommentAPI } from "../../../redux/actions/CommentAction";
 import { getUserCommentInfo } from "../../../redux/actions/FormAction";
 import { useFooter } from "./useFooter";
 import moment from "moment";
+import { bothServiceToken } from "../../../services/BothTokenService";
+import MapContainer from "../../../components/MapConponent/MapContainer";
 export default function FooterDetail() {
   const { arrListComment, starComment } = useSelector(
     (state) => state.CommentReducer
@@ -11,6 +13,29 @@ export default function FooterDetail() {
   const { inforRoom } = useSelector((state) => state.LocationRoomReducer);
   const { inforLocation } = useSelector((state) => state.LocationRoomReducer);
   const { nameList } = useFooter();
+  const [viewport, setViewport] = useState("");
+  const regionMap = async (location) => {
+    let object = {};
+    try {
+      if (location) {
+        let tenViTri = location.tenViTri;
+        let tinhThanh = location.tinhThanh;
+        let quocGia = location.quocGia;
+        let response =
+          await bothServiceToken.getMapBoxGeocoding(`${tenViTri},${tinhThanh},${quocGia}
+          `);
+        object = {
+          latitude: response.data.features[0].center[1],
+          longitude: response.data.features[0].center[0],
+          zoom: 6,
+        };
+        setViewport(object);
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    regionMap(inforLocation);
+  }, [inforLocation]);
   const renderComments = () => {
     return (
       <div className="comment border-bottom">
@@ -184,7 +209,7 @@ export default function FooterDetail() {
       <div className="star_comment">
         <span>
           <i className="fa-solid fa-star"></i>
-          {starComment?.star} -
+          {isNaN(starComment?.star) ? "No Star Yet" : starComment.star} -
         </span>
         <span> {starComment?.total} reviews</span>
       </div>
@@ -259,6 +284,9 @@ export default function FooterDetail() {
           {inforLocation.tenViTri}, {inforLocation.tinhThanh},
           {inforLocation.quocGia}
         </p>
+        <div className="map_where">
+          <MapContainer bookingLocation={viewport} />
+        </div>
       </div>
       <div className="super_host border-bottom">{renderSuperHost()}</div>
       <div className="thing-toKnow border-bottom">{renderThinkToKnow()}</div>

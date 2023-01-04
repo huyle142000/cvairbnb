@@ -268,12 +268,20 @@ function CalendarBook(props) {
             </div>
           </div>
         </div>
-        <div className="text-right mt-3">
+        <div className="text-right">
           <button
             className="btn btn_second"
             onClick={() => {
               setCheckIn("");
               setCheckOut("");
+
+              if (props.filterRoom) {
+                dispatch(getCheckInRequest(""));
+                dispatch(getCheckOutRequest(""));
+              } else {
+                dispatch(getCheckOut(""));
+                dispatch(getCheckIn(""));
+              }
             }}
           >
             Clear dates

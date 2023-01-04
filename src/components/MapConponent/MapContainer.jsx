@@ -10,7 +10,6 @@ import CardComponent from "../CardComponent/CardComponent";
 import { isBuffer } from "lodash";
 
 export default function MapContainer(props) {
-  const arrRoomModified = [];
   const dispatch = useDispatch();
   const { roomFullList, arrGeolocationRoom } = useSelector(
     (state) => state.LocationRoomReducer
@@ -20,7 +19,7 @@ export default function MapContainer(props) {
     initialViewState: {
       latitude: 46.5362364654109,
       longtitude: 108.168944342317,
-      zoom: 6,
+      zoom: 5,
     },
   });
 
@@ -29,7 +28,7 @@ export default function MapContainer(props) {
     if (view) {
       mapRef.current?.flyTo({
         center: [view.longitude, view.latitude],
-        zoom: 6,
+        zoom: 5,
         duration: 1000,
       });
     }
@@ -37,11 +36,19 @@ export default function MapContainer(props) {
   useEffect(() => {
     if (props.viewRequest && mapRef) {
       onSelectCity(props.viewRequest);
+      setTimeout(() => {
+        onSelectCity(props.viewRequest);
+      }, 1000);
     }
-    setTimeout(() => {
-      onSelectCity(props.viewRequest);
-    }, 1000);
   }, [props?.viewRequest]);
+  useEffect(() => {
+    if (props.bookingLocation) {
+      onSelectCity(props.bookingLocation);
+      setTimeout(() => {
+        onSelectCity(props.bookingLocation);
+      }, 1000);
+    }
+  }, [props?.bookingLocation]);
 
   useEffect(() => {
     roomFullList?.map((room) => {

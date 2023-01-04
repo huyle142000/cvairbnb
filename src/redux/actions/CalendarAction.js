@@ -3,7 +3,11 @@ import _ from "lodash";
 import moment from "moment";
 import { bothServiceToken } from "../../services/BothTokenService";
 import { getListRoomRequest } from "../reducer/BookTravel";
-import { getDateIsBooked } from "../reducer/CalendarReducer";
+import {
+  getCheckIn,
+  getCheckOut,
+  getDateIsBooked,
+} from "../reducer/CalendarReducer";
 import { closeSpinner, openSpinner } from "../reducer/Loading";
 
 export const getDateIsBookedAPI = (id) => {
@@ -35,7 +39,7 @@ export const getDateIsBookedAPI = (id) => {
 };
 export const getDateBookedToFilterAPI = (requestData) => {
   return async (dispatch) => {
-    await dispatch(openSpinner())
+    await dispatch(openSpinner());
     try {
       // lấy thông tin ngày đặt của các phòng
       let result = await bothServiceToken.get("phong-thue");
@@ -63,7 +67,6 @@ export const getDateBookedToFilterAPI = (requestData) => {
       //Mảng xử lý phòng
       let arrListRoomToFilter = [];
 
-      // nếu có điều kiện là ngày đi và ngày đến khi user yêu cầu
       let { checkInRequest, checkOutRequest, locationRequest } =
         await requestData;
 
@@ -71,6 +74,7 @@ export const getDateBookedToFilterAPI = (requestData) => {
       let arrFiltersRoomIsBooked;
       // mã phòng không hợp lệ sau khi xử lý
       let arrMaPhongHandle = [];
+      // nếu có điều kiện là ngày đi và ngày đến khi user yêu cầu
       if (checkInRequest) {
         // Kiểm tra các phòng đã đặt
         // Lọc các phòng đã đặt có tồn tại vị trí (ID === maPhong)
@@ -123,13 +127,15 @@ export const getDateBookedToFilterAPI = (requestData) => {
             return room.maPhong;
           }
         });
-
+        console.log(arrFiltersRoomIsBooked, "arrFiltersRoomIsBooked");
+        // arrMaPhongHandle là những phòng không hợp lệ
         arrFiltersRoomIsBooked.map(async (room) => {
-          arrMaPhongHandle.push(room.maPhong);
+          await arrMaPhongHandle.push(room.maPhong);
         });
+        console.log(_.uniq(arrMaPhongHandle), "arrMaPhongHandle");
         // Lọc phòng thích hợp với yêu cầu
         arrListRoomToFilter = await roomFullList.filter((room) => {
-          return !arrMaPhongHandle.includes(room.maPhong);
+          return !arrMaPhongHandle.includes(room.id);
         });
       }
       if (!checkInRequest) {
@@ -242,7 +248,19 @@ export const getDateBookedToFilterAPI = (requestData) => {
         });
 
         validArrListRom = arrIdValidRoom;
+      } else {
+        //TH có yêu cầu ngày đi ngày đến nhưng không có yêu cầu địa địa điểm cụ thể
+        let arrIdValidRoomNoLocation = [];
+        for (let index = 0; index < arrListRoomToFilter.length; index++) {
+          let trip = arrListRoomToFilter[index];
+          arrIdValidRoomNoLocation.push(trip.id);
+        }
+        // console.log(arrIdValidRoomNoLocation, "arrIdValidRoomNoLocation");
+        await dispatch(getListRoomRequest(arrIdValidRoomNoLocation));
       }
+      // dispacth ngày yêu cầu cho các phòng hợp lệ
+      await dispatch(getCheckIn(checkInRequest));
+      await dispatch(getCheckOut(checkOutRequest));
       if (validArrListRom.length > 0) {
         await dispatch(getListRoomRequest(validArrListRom));
       }

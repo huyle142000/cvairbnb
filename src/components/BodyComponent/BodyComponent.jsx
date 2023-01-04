@@ -23,12 +23,14 @@ export default function BodyComponent(props) {
     }
   }, [roomFullList]);
   useEffect(() => {
+    console.log(arrListRoomRequest,"arrListRoomRequest")
     if (isFilter && arrListRoomRequest) {
       let handleRequestRoom = roomFullList.filter((room) => {
         if (arrListRoomRequest.includes(room.id)) {
           return room;
         }
       });
+      console.log(handleRequestRoom,"handleRequestRoom")
       setListRoom(handleRequestRoom);
     }
   }, [arrListRoomRequest]);

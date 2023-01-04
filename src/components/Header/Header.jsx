@@ -10,7 +10,7 @@ import {
   getSuggestionLocation,
 } from "../../redux/actions/LocationRoomAction";
 import CalendarBook from "../../pages/BookingTravel/CalendarBook/CalendarBook";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import {
   getListRoomRequest,
@@ -126,7 +126,7 @@ export default function Header() {
   const [value, setValueInput] = useState("");
   const [locationFirstFind, setLocationFirstFind] = useState("");
   // Check location when click map header
-
+  let params = useParams();
   const handleSearch = () => {
     let locationValue = "";
     if (locationSearch) {
@@ -150,34 +150,48 @@ export default function Header() {
       checkOutRequest: dateOutRequest,
       guestRequest: totalGuest,
     };
-    if (locationValue) {
-      dispatch(getRequestListTrips(request));
-      setActvieSearch(false);
 
-      //
-      setValueInput("");
-      setActiveForm("");
-      //
-      setShowCalendar1(false);
-      setShowCalendar2(false);
-      //
-      dispatch(getCheckInRequest(""));
-      dispatch(getCheckOutRequest(""));
-      //
-      setAdultsNum(0);
-      setChidNum(0);
-      setInfantsNum(0);
-      setPetNum(0);
+    dispatch(getRequestListTrips(request));
+    setActvieSearch(false);
+
+    //
+    setValueInput("");
+    setActiveForm("");
+    //
+    setShowCalendar1(false);
+    setShowCalendar2(false);
+    //
+    dispatch(getCheckInRequest(""));
+    dispatch(getCheckOutRequest(""));
+    //
+    setAdultsNum(0);
+    setChidNum(0);
+    setInfantsNum(0);
+    setPetNum(0);
+    if (locationValue) {
       if (locationValue == "I'm flexible") {
         navigate("/listFlex");
       } else {
         dispatch(getListRoomRequest([]));
-        navigate(`roomsearch/${locationValue}`);
+        if (params.id == "requestday") {
+          navigate(`roomsearch/dayrequest`);
+        } else {
+          navigate(`roomsearch/requestday`);
+
+        }
       }
     } else {
       navigate("/");
 
       setActvieSearch(false);
+    }
+    if (checkInRequest) {
+      dispatch(getListRoomRequest([]));
+      if (params.id == "requestday") {
+        navigate(`roomsearch/dayrequest`);
+      } else {
+        navigate(`roomsearch/requestday`);
+      }
     }
   };
 

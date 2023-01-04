@@ -257,7 +257,7 @@ export default function Details(props) {
           <span> {`${starComment?.total}`} reviews - </span>
 
           <p>
-            <span>{`${inforLocation.tenViTri}`},</span>
+            <span>{inforLocation.tenViTri},</span>
             <span>{inforLocation.tinhThanh},</span>
             <span>{inforLocation.quocGia}</span>
           </p>

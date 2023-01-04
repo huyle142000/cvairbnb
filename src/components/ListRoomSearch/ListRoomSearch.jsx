@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDateBookedToFilterAPI } from "../../redux/actions/CalendarAction";
 import { getListFullRoomAPI } from "../../redux/actions/LocationRoomAction";
 import { getListRoomRequest } from "../../redux/reducer/BookTravel";
-import { closeSpinner, openSpinner } from "../../redux/reducer/Loading";
 import { bothServiceToken } from "../../services/BothTokenService";
 import BodyComponent from "../BodyComponent/BodyComponent";
 import MapContainer from "../MapConponent/MapContainer";
@@ -15,10 +14,11 @@ export default function ListRoomSearch(props) {
     (state) => state.BookTravel
   );
   useEffect(() => {
+    console.log(arrListRoomRequest.length,"arrListRoomRequest.length")
     if (arrListRoomRequest.length === 0) {
       dispatch(getDateBookedToFilterAPI(requestListRoom));
     }
-  }, []);
+  }, [arrListRoomRequest])
   useEffect(() => {
     return () => {
       dispatch(getListRoomRequest([]));
