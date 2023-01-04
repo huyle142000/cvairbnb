@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getGeolocationAPI } from "../../redux/actions/LocationRoomAction";
 import CardComponent from "../CardComponent/CardComponent";
 import { isBuffer } from "lodash";
-
+// import mapboxgl from "";
+// import MapboxWorker from './mapbox-gl/dist/mapbox-gl-csp-worker';
 export default function MapContainer(props) {
+  // mapboxgl.workerClass = require('worker-loader/mapbox-gl/dist/mapbox-gl-csp-worker').default;
   const dispatch = useDispatch();
   const { roomFullList, arrGeolocationRoom } = useSelector(
     (state) => state.LocationRoomReducer
