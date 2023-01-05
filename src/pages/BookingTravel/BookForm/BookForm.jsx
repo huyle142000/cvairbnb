@@ -23,6 +23,8 @@ export default function BookForm(props) {
       document.removeEventListener("mousedown", handleCalendarPopUp);
     };
   }, []);
+  useEffect(() => {}, [props?.inforRoom]);
+
   const {
     checkInDate,
     setShow,

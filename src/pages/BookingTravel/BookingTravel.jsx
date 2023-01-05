@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { getListCommentAPI } from "../../redux/actions/CommentAction";
 import {
   getInfoLocationAPI,
@@ -9,17 +9,18 @@ import {
 
 import Details from "./Details/Details";
 import FooterDetail from "./FooterDetail/FooterDetail";
-
+let previd = "";
 export default function BookingTravel(props) {
   let dispatch = useDispatch();
-  let location = useLocation();
+  let param = useParams();
   useEffect(() => {
-    let getIdRoom = location.pathname.split("/");
-    dispatch(getInfoRoomAPI(getIdRoom[2]));
-  }, []);
+    if (param?.id != previd) {
+      previd = param?.id;
+      dispatch(getInfoRoomAPI(param?.id));
+      window.scrollTo(0, 0);
+    }
+  }, [param?.id]);
   const { inforRoom } = useSelector((state) => state.LocationRoomReducer);
- 
-
   useEffect(() => {
     dispatch(getListCommentAPI(inforRoom?.id));
   }, [inforRoom?.id]);
