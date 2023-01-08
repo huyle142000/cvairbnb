@@ -5,6 +5,8 @@ const initialState = {
   inforYourTrips: [],
   requestListRoom: {},
 
+  isShowMapPopUp: "",
+
   totalGuest: 0,
   guestAdults: 1,
   guestChildren: 0,

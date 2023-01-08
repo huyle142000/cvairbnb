@@ -2,20 +2,16 @@ import React, { useCallback, useRef } from "react";
 import { useState } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
 import { MAP_BOX_TOKEN } from "../../utils/setting";
-import { roomAddress } from "../../utils/roomAddress";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGeolocationAPI } from "../../redux/actions/LocationRoomAction";
 import CardComponent from "../CardComponent/CardComponent";
-import { isBuffer } from "lodash";
-// import mapboxgl from "";
-// import MapboxWorker from './mapbox-gl/dist/mapbox-gl-csp-worker';
+import { v4 } from "uuid";
+import { bothServiceToken } from "../../services/BothTokenService";
+
 export default function MapContainer(props) {
-  // mapboxgl.workerClass = require('worker-loader/mapbox-gl/dist/mapbox-gl-csp-worker').default;
   const dispatch = useDispatch();
-  const { roomFullList, arrGeolocationRoom } = useSelector(
-    (state) => state.LocationRoomReducer
-  );
+  const { roomFullList } = useSelector((state) => state.LocationRoomReducer);
   const [showPopup, togglePopup] = useState({});
   const [viewport, setViewport] = useState({
     initialViewState: {
@@ -53,31 +49,41 @@ export default function MapContainer(props) {
   }, [props?.bookingLocation]);
 
   useEffect(() => {
-    roomFullList?.map((room) => {
-      const { id } = room;
-      // Get Longitude and Latitude
-      dispatch(getGeolocationAPI(room));
-    });
+    getCoordinates();
   }, []);
   useEffect(() => {}, [showPopup]);
-
+  let [arrGeolocationRoom, setArrLocal] = useState([]);
+  let getCoordinates = () => {
+    roomFullList.map((room) => {
+      bothServiceToken
+        .getMapBoxGeocoding(room.tenPhong)
+        .then((res) => {
+          setArrLocal((prev) =>
+            prev.concat({
+              roomInfo: room,
+              latitude: res.data?.features[0].center[1],
+              longitude: res.data?.features[0].center[0],
+            })
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  };
   const renderLocation = () => {
-    return arrGeolocationRoom?.map((room) => {
-      const { id, giaTien, geolocation } = room;
-      const { latitude, longtitude } = geolocation;
+    return arrGeolocationRoom?.map((room, index) => {
+      let { id, giaTien } = room?.roomInfo;
+      const { latitude, longitude } = room;
       return (
         <Marker
           onClick={(e) => {
             e.originalEvent.stopPropagation();
             togglePopup({ ...showPopup, showMap: id });
           }}
-          key={`${
-            props.dataFilter === undefined
-              ? `card--map--${id}`
-              : `card--filter--${id}`
-          }`}
+          key={index}
           latitude={latitude}
-          longitude={longtitude}
+          longitude={longitude}
           offsetLeft={-20}
           offsetTop={-30}
         >
@@ -85,23 +91,27 @@ export default function MapContainer(props) {
             <span>{`${giaTien}$`}</span>
           </div>
           {showPopup.showMap === id && (
-            <Popup
-              latitude={latitude}
-              longitude={longtitude}
-              closeButton={false}
-              closeOnClick={true}
-              focusAfterOpen={true}
-              onClose={() => {
-                togglePopup(false);
-              }}
-              anchor="top-right"
-            >
-              <CardComponent
-                isActiveMap={false}
-                card={room}
-                filerRoom={props.filerRoom}
-              />
-            </Popup>
+            <div onClick={()=>{
+              togglePopup({ ...showPopup, showMap: "" });
+            }}>
+              <Popup
+                latitude={latitude}
+                longitude={longitude}
+                closeButton={false}
+                closeOnClick={true}
+                focusAfterOpen={true}
+                onClose={() => {
+                  togglePopup(false);
+                }}
+                anchor="top-right"
+              >
+                <CardComponent
+                  isActiveMap={false}
+                  card={room?.roomInfo}
+                  filerRoom={props.filerRoom}
+                />
+              </Popup>
+            </div>
           )}
         </Marker>
       );
