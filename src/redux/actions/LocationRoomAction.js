@@ -4,8 +4,12 @@ import { roomImage } from "../../utils/roomImage";
 import { closeSpinner, openSpinner } from "../reducer/Loading";
 import {
   getArrGeolocationRoom,
-  getArrSuggestRegion, getInforLocation, getInforRoom,
-  getListFullRoom, getListRoom, getLocationList
+  getArrSuggestRegion,
+  getInforLocation,
+  getInforRoom,
+  getListFullRoom,
+  getListRoom,
+  getLocationList,
 } from "../reducer/LocationRoomReducer";
 
 export function getListLocationAPI() {
@@ -89,7 +93,7 @@ export function getListFullRoomAPI() {
     } catch (error) {
       console.log(error.response);
     } finally {
-      await dispatch(closeSpinner(true));
+      await dispatch(closeSpinner());
     }
   };
 }

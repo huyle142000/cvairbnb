@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   editRoomAPI,
-  getInfoRoomAPI,
+  getInfoRoomAPI
 } from "../../../../redux/actions/LocationRoomAction";
 
 export const useEditRoom = (props) => {
@@ -15,18 +15,7 @@ export const useEditRoom = (props) => {
 
   useEffect(() => {
     dispatch(getInfoRoomAPI(id));
-
-    handleChangeSetFieldValue();
   }, []);
-  useEffect(() => {
-    console.log(Object.keys(inforRoom), "12");
-    let arrKeyOfRoom = Object.keys(inforRoom);
-    if (arrKeyOfRoom != 0) {
-      arrKeyOfRoom.map((room, i) => {
-        handleChangeSetFieldValue(room, inforRoom[room]);
-      });
-    }
-  }, [inforRoom]);
   let [imgSrc, setImgSrc] = useState("");
   //   formik
   const formik = useFormik({
@@ -54,7 +43,7 @@ export const useEditRoom = (props) => {
       hinhAnh: null,
     },
     onSubmit: (values, { resetForm }) => {
-      dispatch(editRoomAPI(values.id, values,navigate));
+      dispatch(editRoomAPI(values.id, values, navigate));
     },
   });
 

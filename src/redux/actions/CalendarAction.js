@@ -2,6 +2,7 @@ import { wait } from "@testing-library/user-event/dist/utils/misc/wait";
 import _ from "lodash";
 import moment from "moment";
 import { bothServiceToken } from "../../services/BothTokenService";
+import { roomImage } from "../../utils/roomImage";
 import { getListRoomRequest } from "../reducer/BookTravel";
 import {
   getCheckIn,
@@ -58,12 +59,12 @@ export const getDateBookedToFilterAPI = (requestData) => {
         return arrExistLocation.includes(room.maViTri);
       });
       // Lấy các mã phòng hợp lệ có tồn tại vị trí (ID)
-      await roomFullList.map((room) => {
+      await roomFullList.map(async (room, index) => {
         arrIdRoom.push(Number(room.id));
       });
 
       // Mảng chứa các phòng hợp lệ
-      let validArrListRom = [];
+      let validArrListRoom = [];
       //Mảng xử lý phòng
       let arrListRoomToFilter = [];
 
@@ -245,7 +246,7 @@ export const getDateBookedToFilterAPI = (requestData) => {
           }
         });
 
-        validArrListRom = arrIdValidRoom;
+        validArrListRoom = arrIdValidRoom;
       } else {
         //TH có yêu cầu ngày đi ngày đến nhưng không có yêu cầu địa địa điểm cụ thể
         let arrIdValidRoomNoLocation = [];
@@ -258,8 +259,24 @@ export const getDateBookedToFilterAPI = (requestData) => {
       // dispacth ngày yêu cầu cho các phòng hợp lệ
       await dispatch(getCheckIn(checkInRequest));
       await dispatch(getCheckOut(checkOutRequest));
-      if (validArrListRom.length > 0) {
-        await dispatch(getListRoomRequest(validArrListRom));
+      if (validArrListRoom.length > 0) {
+        let handleRequestRoom = roomFullList.filter((room) => {
+          if (validArrListRoom.includes(room.id)) {
+            return room;
+          }
+        });
+        let arrRoomValid = [];
+        await handleRequestRoom.map(async (room, index) => {
+          let imgSrc = "";
+          if (index >= roomImage.length) {
+            imgSrc = roomImage[index % roomImage.length];
+          } else {
+            imgSrc = roomImage[index];
+          }
+          arrRoomValid.push({ ...room, img: imgSrc });
+        });
+
+        await dispatch(getListRoomRequest(arrRoomValid));
       }
     } catch (error) {
       console.log(error.response);

@@ -2,7 +2,6 @@ import { Col } from "antd";
 import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getListFullRoomAPI } from "../../redux/actions/LocationRoomAction";
-import { closeSpinner, openSpinner } from "../../redux/reducer/Loading";
 import CardComponent from "../CardComponent/CardComponent";
 import SpinnerLoading from "../SpinnerLoading/SpinnerLoading";
 const MapContainer = React.lazy(() => import("../MapConponent/MapContainer"));
@@ -13,7 +12,9 @@ export default function BodyComponent(props) {
   const [arrListRoom, setListRoom] = useState([]);
   let { isFilter, arrListRoomRequest } = props;
   useEffect(() => {
-    dispatch(getListFullRoomAPI());
+    if (!isFilter && !arrListRoomRequest) {
+      dispatch(getListFullRoomAPI());
+    }
   }, []);
   useEffect(() => {
     if (roomFullList && props.isFilter === undefined) {
@@ -22,12 +23,7 @@ export default function BodyComponent(props) {
   }, [roomFullList]);
   useEffect(() => {
     if (isFilter && arrListRoomRequest) {
-      let handleRequestRoom = roomFullList.filter((room) => {
-        if (arrListRoomRequest.includes(room.id)) {
-          return room;
-        }
-      });
-      setListRoom(handleRequestRoom);
+      setListRoom(arrListRoomRequest);
     }
   }, [arrListRoomRequest]);
 

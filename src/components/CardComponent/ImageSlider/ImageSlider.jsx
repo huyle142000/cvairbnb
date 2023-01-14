@@ -64,7 +64,7 @@ export const ImageSlider = (props) => {
               onClick={() => {
                 navigate(`/bookingtravel/${id}`);
               }}
-              src={props.image.arrImg[0]}
+              src={props.image?.arrImg[0]}
               alt="img1"
             />
           </motion.div>
