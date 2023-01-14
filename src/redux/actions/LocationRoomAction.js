@@ -1,19 +1,12 @@
-import { wait } from "@testing-library/user-event/dist/utils";
 import { toast } from "react-toastify";
 import { bothServiceToken } from "../../services/BothTokenService";
-import {
-  getLocationList,
-  getInforLocation,
-  getListRoom,
-  getInforRoom,
-  getListFullRoom,
-  getArrGeolocationRoom,
-  getArrSuggestRegion,
-  getRoomIdFilter,
-} from "../reducer/LocationRoomReducer";
 import { roomImage } from "../../utils/roomImage";
-import moment from "moment";
 import { closeSpinner, openSpinner } from "../reducer/Loading";
+import {
+  getArrGeolocationRoom,
+  getArrSuggestRegion, getInforLocation, getInforRoom,
+  getListFullRoom, getListRoom, getLocationList
+} from "../reducer/LocationRoomReducer";
 
 export function getListLocationAPI() {
   return async (dispatch) => {
@@ -30,7 +23,7 @@ export function uploadLocation(datas, navigate) {
     try {
       const { data } = await bothServiceToken.post("vi-tri", datas);
       getListLocationAPI();
-      // navigate(-1);
+      navigate("/location");
       toast.success("Success");
     } catch (e) {
       toast.error("Error!!!");
@@ -121,8 +114,8 @@ export function uploadRoomAPI(datas, navigate) {
   return async (dispatch) => {
     try {
       const { data } = await bothServiceToken.post("phong-thue", datas);
-      // navigate(-1);
       toast.success("Success");
+      // navigate(`/admin/rooms/${datas.maViTri}`);
     } catch (e) {
       console.log(e.response.data);
       toast.error("Error!!!");
@@ -134,7 +127,7 @@ export function editRoomAPI(id, datas, navigate) {
   return async (dispatch) => {
     try {
       const { data } = await bothServiceToken.put(`phong-thue/${id}`, datas);
-      getListRoomAPI(id)
+      getListRoomAPI(id);
       await navigate(-1);
       toast.success("Thành công!!!");
     } catch (e) {
@@ -159,12 +152,12 @@ export function getInfoRoomAPI(id) {
   };
 }
 // delete vị trí
-export function deleteRoomAPI(id, navigate) {
+export function deleteRoomAPI(id, navigate, idParams) {
   return async (dispatch) => {
     try {
       const { data } = await bothServiceToken.delete(`phong-thue/${id}`);
+      dispatch(getListRoomAPI(idParams));
       toast.success("Success");
-      navigate(0);
     } catch (e) {
       toast.error("Error!!!");
     }

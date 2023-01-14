@@ -1,9 +1,15 @@
-import { Form, Input } from "antd";
+import { Form, Input, Switch } from "antd";
 import React from "react";
 import { useEditRoom } from "./useEditRoom";
 
 const EditRoom = (props) => {
-  const { formik, imgSrc, handleChangeFile, inforRoom } = useEditRoom(props);
+  const {
+    formik,
+    imgSrc,
+    handleChangeFile,
+    inforRoom,
+    handleChangeSetFieldValue,
+  } = useEditRoom(props);
 
   const { handleSubmit, handleChange, values } = formik;
   return (
@@ -13,7 +19,7 @@ const EditRoom = (props) => {
           className="pb-3 text-center"
           style={{ borderBottom: "2px solid #000" }}
         >
-          CẬP NHẬT VỊ TRÍ
+          CẬP NHẬT PHÒNG
         </h2>
       </div>
       <Form
@@ -72,89 +78,68 @@ const EditRoom = (props) => {
           <Input name="giuong" value={values.giuong} onChange={handleChange} />
         </Form.Item>
         <Form.Item label="Máy giặt">
-          <select
+          <Switch
             name="mayGiat"
-            value={values.mayGiat}
-            onChange={handleChange}
-            id=""
-          >
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+            checked={values.mayGiat}
+            onChange={handleChangeSetFieldValue("mayGiat")}
+          />
         </Form.Item>
         <Form.Item label="Bàn Là">
-          <select
+          <Switch
             name="banLa"
-            value={values.banLa}
-            onChange={handleChange}
-            id=""
-          >
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+            checked={values.banLa}
+            onChange={handleChangeSetFieldValue("banLa")}
+          />
         </Form.Item>
         <Form.Item label="Tivi">
-          <select
+          <Switch
             name="tivi"
-            value={values.tivi}
-            onChange={handleChange}
-            id=""
-          >
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+            checked={values.tivi}
+            onChange={handleChangeSetFieldValue("tivi")}
+          />
         </Form.Item>
         <Form.Item label="Điều hòa">
-          <select
+          <Switch
             name="dieuHoa"
-            value={values.dieuHoa}
-            onChange={handleChange}
-            id=""
-          >
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+            checked={values.dieuHoa}
+            onChange={handleChangeSetFieldValue("dieuHoa")}
+          />
         </Form.Item>
         <Form.Item label="Wifi">
-          <select name="wifi" value={values.wifi} onChange={handleChange} id="">
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+          <Switch
+            name="wifi"
+            checked={values.wifi}
+            onChange={handleChangeSetFieldValue("wifi")}
+          />
         </Form.Item>
         <Form.Item label="Bãi đỗ">
-          <select name="doXe" value={values.doXe} onChange={handleChange} id="">
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+          <Switch
+            name="doXe"
+            checked={values.doXe}
+            onChange={handleChangeSetFieldValue("doXe")}
+          />
         </Form.Item>
         <Form.Item label="Bếp">
-          <select name="bep" value={values.bep} onChange={handleChange} id="">
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+          <Switch
+            name="bep"
+            checked={values.bep}
+            onChange={handleChangeSetFieldValue("bep")}
+          />
         </Form.Item>
 
         <Form.Item label="Hồ Bơi">
-          <select
+          <Switch
             name="hoBoi"
-            value={values.hoBoi}
-            onChange={handleChange}
-            id=""
-          >
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+            checked={values.hoBoi}
+            onChange={handleChangeSetFieldValue("hoBoi")}
+          />
         </Form.Item>
         <Form.Item label="Bàn ủi">
-          <select
+          <Switch
             name="banUi"
-            value={values.banUi}
-            onChange={handleChange}
-            id=""
-          >
-            <option value={true}>Có</option>
-            <option value={false}>Không</option>
-          </select>
+            checked={values.banUi}
+            onChange={handleChangeSetFieldValue("banUi")}
+          />
         </Form.Item>
 
         <Form.Item label={<h6 className="font-weight-bold m-0">Hình ảnh</h6>}>

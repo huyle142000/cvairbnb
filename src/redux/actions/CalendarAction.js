@@ -127,12 +127,10 @@ export const getDateBookedToFilterAPI = (requestData) => {
             return room.maPhong;
           }
         });
-        console.log(arrFiltersRoomIsBooked, "arrFiltersRoomIsBooked");
         // arrMaPhongHandle là những phòng không hợp lệ
         arrFiltersRoomIsBooked.map(async (room) => {
           await arrMaPhongHandle.push(room.maPhong);
         });
-        console.log(_.uniq(arrMaPhongHandle), "arrMaPhongHandle");
         // Lọc phòng thích hợp với yêu cầu
         arrListRoomToFilter = await roomFullList.filter((room) => {
           return !arrMaPhongHandle.includes(room.id);
@@ -255,7 +253,6 @@ export const getDateBookedToFilterAPI = (requestData) => {
           let trip = arrListRoomToFilter[index];
           arrIdValidRoomNoLocation.push(trip.id);
         }
-        // console.log(arrIdValidRoomNoLocation, "arrIdValidRoomNoLocation");
         await dispatch(getListRoomRequest(arrIdValidRoomNoLocation));
       }
       // dispacth ngày yêu cầu cho các phòng hợp lệ

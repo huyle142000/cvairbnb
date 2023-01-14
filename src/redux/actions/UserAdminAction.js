@@ -32,6 +32,7 @@ export function createUser(value, navigate) {
       const { data } = await bothServiceToken.post(`users`, value);
       toast.success("Tạo mới User thành công");
       navigate("/admin");
+      getUserListAPI();
     } catch (e) {}
   };
 }

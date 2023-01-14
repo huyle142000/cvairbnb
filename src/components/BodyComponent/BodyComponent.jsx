@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row } from "antd";
-import CardComponent from "../CardComponent/CardComponent";
+import { Col } from "antd";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getListFullRoomAPI } from "../../redux/actions/LocationRoomAction";
-import { roomImage } from "../../utils/roomImage";
-import MapContainer from "../MapConponent/MapContainer";
 import { closeSpinner, openSpinner } from "../../redux/reducer/Loading";
-import { getDateBookedToFilterAPI } from "../../redux/actions/CalendarAction";
-
+import CardComponent from "../CardComponent/CardComponent";
+import SpinnerLoading from "../SpinnerLoading/SpinnerLoading";
+const MapContainer = React.lazy(() => import("../MapConponent/MapContainer"));
 export default function BodyComponent(props) {
   const dispatch = useDispatch();
   const [activeMap, setActiveMap] = useState(false);
@@ -29,7 +27,6 @@ export default function BodyComponent(props) {
           return room;
         }
       });
-      console.log(handleRequestRoom,"handleRequestRoom")
       setListRoom(handleRequestRoom);
     }
   }, [arrListRoomRequest]);
@@ -57,7 +54,11 @@ export default function BodyComponent(props) {
           </div>
         </div>
       )}
-      {activeMap && <MapContainer arrRoom={arrListRoom} />}
+      {activeMap && (
+        <Suspense fallback={<SpinnerLoading />}>
+          <MapContainer arrRoom={arrListRoom} />
+        </Suspense>
+      )}
       <div
         className="show__map"
         onClick={() => {

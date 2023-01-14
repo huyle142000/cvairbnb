@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDateBookedToFilterAPI } from "../../redux/actions/CalendarAction";
-import { getListFullRoomAPI } from "../../redux/actions/LocationRoomAction";
 import { getListRoomRequest } from "../../redux/reducer/BookTravel";
 import { bothServiceToken } from "../../services/BothTokenService";
-import BodyComponent from "../BodyComponent/BodyComponent";
-import MapContainer from "../MapConponent/MapContainer";
+import SpinnerLoading from "../SpinnerLoading/SpinnerLoading";
+const MapContainer = React.lazy(() => import("./../MapConponent/MapContainer"));
+const BodyComponent = React.lazy(() =>
+  import("./../BodyComponent/BodyComponent")
+);
 
 export default function ListRoomSearch(props) {
   const dispatch = useDispatch();
@@ -14,11 +16,10 @@ export default function ListRoomSearch(props) {
     (state) => state.BookTravel
   );
   useEffect(() => {
-    console.log(arrListRoomRequest.length,"arrListRoomRequest.length")
-    if (arrListRoomRequest.length === 0) {
+      if (arrListRoomRequest.length === 0) {
       dispatch(getDateBookedToFilterAPI(requestListRoom));
     }
-  }, [arrListRoomRequest])
+  }, [arrListRoomRequest]);
   useEffect(() => {
     return () => {
       dispatch(getListRoomRequest([]));
@@ -50,17 +51,19 @@ export default function ListRoomSearch(props) {
   return (
     <div className="list_room-filter">
       <div className="row">
-        <div className="col-12 col-md-7">
-          <BodyComponent
-            isFilter={true}
-            arrListRoomRequest={arrListRoomRequest}
-          />
-        </div>
-        <div className="col-12 col-md-5">
-          <div className="map_filter">
-            <MapContainer filerRoom={"filter"} viewRequest={viewport} />
+        <Suspense fallback={<SpinnerLoading />}>
+          <div className="col-12 col-md-7">
+            <BodyComponent
+              isFilter={true}
+              arrListRoomRequest={arrListRoomRequest}
+            />
           </div>
-        </div>
+          <div className="col-12 col-md-5">
+            <div className="map_filter">
+              <MapContainer filerRoom={"filter"} viewRequest={viewport} />
+            </div>
+          </div>
+        </Suspense>
       </div>
     </div>
   );

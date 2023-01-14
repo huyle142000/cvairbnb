@@ -101,7 +101,7 @@ const ListRoom = () => {
               className="movie_admin-icon text-danger"
               onClick={() => {
                 if (window.confirm("Bạn muốn xóa vị trí này ?")) {
-                  dispatch(deleteRoomAPI(vitri.id, navigate));
+                  dispatch(deleteRoomAPI(vitri.id, navigate,id));
                 }
               }}
             >

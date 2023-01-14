@@ -15,7 +15,18 @@ export const useEditRoom = (props) => {
 
   useEffect(() => {
     dispatch(getInfoRoomAPI(id));
+
+    handleChangeSetFieldValue();
   }, []);
+  useEffect(() => {
+    console.log(Object.keys(inforRoom), "12");
+    let arrKeyOfRoom = Object.keys(inforRoom);
+    if (arrKeyOfRoom != 0) {
+      arrKeyOfRoom.map((room, i) => {
+        handleChangeSetFieldValue(room, inforRoom[room]);
+      });
+    }
+  }, [inforRoom]);
   let [imgSrc, setImgSrc] = useState("");
   //   formik
   const formik = useFormik({
@@ -43,7 +54,6 @@ export const useEditRoom = (props) => {
       hinhAnh: null,
     },
     onSubmit: (values, { resetForm }) => {
-     
       dispatch(editRoomAPI(values.id, values,navigate));
     },
   });
@@ -66,6 +76,7 @@ export const useEditRoom = (props) => {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
         setImgSrc(e.target.result);
+        formik.setFieldValue("hinhAnh", e.target.result);
       };
       return;
     }
