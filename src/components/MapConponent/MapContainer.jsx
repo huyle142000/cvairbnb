@@ -1,13 +1,9 @@
-import React, { useCallback, useRef } from "react";
-import { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
-import { MAP_BOX_TOKEN } from "../../utils/setting";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGeolocationAPI } from "../../redux/actions/LocationRoomAction";
-import CardComponent from "../CardComponent/CardComponent";
-import { v4 } from "uuid";
 import { bothServiceToken } from "../../services/BothTokenService";
+import { MAP_BOX_TOKEN } from "../../utils/setting";
+import CardComponent from "../CardComponent/CardComponent";
 
 export default function MapContainer(props) {
   const dispatch = useDispatch();
@@ -55,20 +51,22 @@ export default function MapContainer(props) {
   let [arrGeolocationRoom, setArrLocal] = useState([]);
   let getCoordinates = () => {
     roomFullList.map((room) => {
-      bothServiceToken
-        .getMapBoxGeocoding(room.tenPhong)
-        .then((res) => {
-          setArrLocal((prev) =>
-            prev.concat({
-              roomInfo: room,
-              latitude: res.data?.features[0].center[1],
-              longitude: res.data?.features[0].center[0],
-            })
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (room.tenPhong) {
+        bothServiceToken
+          .getMapBoxGeocoding(room.tenPhong)
+          .then((res) => {
+            setArrLocal((prev) =>
+              prev?.concat({
+                roomInfo: room,
+                latitude: res.data?.features[0]?.center[1],
+                longitude: Number(res.data?.features[0]?.center[0]),
+              })
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     });
   };
   const renderLocation = () => {
@@ -91,9 +89,11 @@ export default function MapContainer(props) {
             <span>{`${giaTien}$`}</span>
           </div>
           {showPopup.showMap === id && (
-            <div onClick={()=>{
-              togglePopup({ ...showPopup, showMap: "" });
-            }}>
+            <div
+              onClick={() => {
+                togglePopup({ ...showPopup, showMap: "" });
+              }}
+            >
               <Popup
                 latitude={latitude}
                 longitude={longitude}
